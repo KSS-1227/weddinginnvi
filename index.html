@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Aarav & Meera — The Royal Wedding Celebration</title>
   <meta name="description" content="We joyfully invite you to the royal wedding celebration of Aarav & Meera in Udaipur. Explore our story, itinerary, dress codes, and RSVP." />
   
@@ -182,65 +182,324 @@
       transform: scale(0.96);
     }
 
-    /* Curtain / Gate Opening Animation */
-    .curtain-panel-left {
-      transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-    .curtain-panel-right {
-      transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1);
-    }
-    .curtains-open .curtain-panel-left {
-      transform: translateX(-102%) skewX(-2deg);
-    }
-    .curtains-open .curtain-panel-right {
-      transform: translateX(102%) skewX(2deg);
-    }
-    .curtains-open #sealMedallionWrapper {
-      opacity: 0;
-      transform: scale(1.3) rotate(15deg);
-      pointer-events: none;
-    }
-
-    /* Equalizer Music Bars */
-    .eq-bar {
-      display: inline-block;
-      width: 2.5px;
-      height: 12px;
-      background: #D4AF37;
-      border-radius: 9999px;
-      animation: eqAnimation 1s ease-in-out infinite;
-    }
-    .eq-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
-    .eq-bar:nth-child(3) { animation-delay: 0.4s; height: 10px; }
-    .eq-bar:nth-child(4) { animation-delay: 0.1s; height: 14px; }
-    @keyframes eqAnimation {
-      0%, 100% { transform: scaleY(0.3); }
-      50% { transform: scaleY(1); }
-    }
-    .paused-eq .eq-bar {
-      animation-play-state: paused;
-      transform: scaleY(0.3);
-    }
-
-    /* Prevent mobile overflow */
+    /* Prevent mobile overflow and ensure safe area compliance */
     body {
       overflow-x: hidden;
       width: 100%;
+      min-height: 100svh;
+      min-height: 100dvh;
       -webkit-tap-highlight-color: transparent;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      padding-left: env(safe-area-inset-left, 0px);
+      padding-right: env(safe-area-inset-right, 0px);
     }
 
-    /* Sparkle cursor dot */
-    .sparkle-trail {
+    /* =========================================================
+       PHASE 1: CINEMATIC OPENING SEQUENCE STYLES
+       ========================================================= */
+    #preloaderOverlay {
       position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #04140F;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    }
+    #preloaderOverlay.preloader-done {
+      opacity: 0;
+      visibility: hidden;
       pointer-events: none;
-      width: 6px;
-      height: 6px;
+    }
+    .monogram-path {
+      stroke-dasharray: 600;
+      stroke-dashoffset: 600;
+      animation: drawMonogram 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes drawMonogram {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Sealed Container */
+    #sealedOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: #04140F;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(12, 43, 33, 0.8) 0%, #04140F 100%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L45 15 L30 30 L15 15 Z M30 30 L45 45 L30 60 L15 45 Z M0 30 L15 15 L30 30 L15 45 Z M60 30 L45 15 L30 30 L45 45 Z' fill='%23D4AF37' fill-opacity='0.035' fill-rule='evenodd'/%3E%3C/svg%3E");
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: env(safe-area-inset-top, 16px) 16px env(safe-area-inset-bottom, 16px);
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #sealedOverlay.opening-started {
+      pointer-events: none;
+    }
+    #sealedOverlay.sealed-fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Skip Intro Button */
+    #skipIntroBtn {
+      position: absolute;
+      top: max(env(safe-area-inset-top, 16px), 20px);
+      right: 20px;
+      z-index: 105;
+      background: rgba(4, 20, 15, 0.75);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      color: #DEC47B;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      cursor: pointer;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #skipIntroBtn.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Floating CSS Gold Dust Specks */
+    .gold-dust-speck {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: radial-gradient(circle, #FFF1B0 0%, #D4AF37 80%, transparent 100%);
       border-radius: 50%;
-      background: radial-gradient(circle, #fff, #D4AF37);
-      box-shadow: 0 0 8px #D4AF37;
-      transform: translate(-50%, -50%);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-      z-index: 9999;
+      pointer-events: none;
+      animation: driftUpward 6s linear infinite;
+    }
+    @keyframes driftUpward {
+      0% {
+        transform: translateY(60px) translateX(0) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.8;
+      }
+      80% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-120px) translateX(25px) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    /* 3D Wax Seal Realistic Breathes & Glow */
+    .wax-seal-wrapper {
+      position: relative;
+      cursor: pointer;
+      touch-action: pan-y;
+      transition: transform 0.3s ease;
+    }
+    .wax-seal-glow-ring {
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.45) 0%, rgba(212, 175, 55, 0) 70%);
+      animation: sealGlowPulse 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes sealGlowPulse {
+      0%, 100% { transform: scale(0.95); opacity: 0.4; }
+      50% { transform: scale(1.15); opacity: 0.85; }
+    }
+    .wax-seal-base {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 32%, #E8A843 0%, #B87B1C 52%, #683802 100%);
+      box-shadow: 
+        0 14px 32px -4px rgba(110, 56, 5, 0.7),
+        inset 0 2px 4px rgba(255, 238, 180, 0.85),
+        inset 0 -4px 8px rgba(45, 18, 0, 0.75);
+      animation: sealBreathe 3s ease-in-out infinite;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @keyframes sealBreathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* Wax Seal Splitting into two halves */
+    .seal-half {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1), opacity 0.45s ease;
+    }
+    .seal-half-left {
+      clip-path: polygon(0 0, 51% 0, 48% 35%, 52% 65%, 49% 100%, 0 100%);
+    }
+    .seal-half-right {
+      clip-path: polygon(51% 0, 100% 0, 100% 100%, 49% 100%, 52% 65%, 48% 35%);
+    }
+    .seal-cracked .seal-half-left {
+      transform: translateX(-36px) rotate(-14deg);
+      opacity: 0;
+    }
+    .seal-cracked .seal-half-right {
+      transform: translateX(36px) rotate(14deg);
+      opacity: 0;
+    }
+
+    /* Warm Light Flash on Tap */
+    #sealFlash {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      background: radial-gradient(circle at 50% 50%, rgba(255, 245, 210, 0.95) 0%, rgba(212, 175, 55, 0.5) 40%, transparent 80%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease-out;
+    }
+    #sealFlash.flash-active {
+      opacity: 1;
+    }
+
+    /* 3D Palace Jharokha Doors */
+    #palaceDoorsContainer {
+      position: fixed;
+      inset: 0;
+      z-index: 85;
+      perspective: 1200px;
+      pointer-events: none;
+      overflow: hidden;
+      display: flex;
+    }
+    .jharokha-door {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      background: #061B14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
+      transition: transform 1.4s cubic-bezier(0.7, 0, 0.2, 1);
+    }
+    .jharokha-door-left {
+      left: 0;
+      transform-origin: left center;
+      border-right: 1.5px solid rgba(212, 175, 55, 0.6);
+    }
+    .jharokha-door-right {
+      right: 0;
+      transform-origin: right center;
+      border-left: 1.5px solid rgba(212, 175, 55, 0.6);
+    }
+    .doors-swinging .jharokha-door-left {
+      transform: rotateY(-105deg);
+    }
+    .doors-swinging .jharokha-door-right {
+      transform: rotateY(105deg);
+    }
+
+    /* Ken Burns Hero Photo settle animation */
+    .ken-burns-hero {
+      transform: scale(1.15);
+      transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .ken-burns-settled {
+      transform: scale(1.0);
+    }
+
+    /* Staggered text choreography */
+    .choreography-item {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .choreography-active .choreography-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mask-reveal-wrap {
+      overflow: hidden;
+      display: inline-block;
+    }
+    .mask-reveal-child {
+      transform: translateY(105%);
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .choreography-active .mask-reveal-child {
+      transform: translateY(0%);
+    }
+
+    /* Date Line expanding rule */
+    .gold-expanding-rule {
+      width: 0%;
+      opacity: 0;
+      transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+    }
+    .choreography-active .gold-expanding-rule {
+      width: 100%;
+      opacity: 1;
+    }
+
+    /* Reduced Motion Accessibility Overrides */
+    @media (prefers-reduced-motion: reduce) {
+      .monogram-path {
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+      }
+      .wax-seal-base, .wax-seal-glow-ring, .gold-dust-speck {
+        animation: none !important;
+      }
+      .jharokha-door {
+        transition: opacity 0.8s ease !important;
+        transform: none !important;
+      }
+      .doors-swinging .jharokha-door-left,
+      .doors-swinging .jharokha-door-right {
+        opacity: 0 !important;
+        transform: none !important;
+      }
+      .ken-burns-hero {
+        transform: scale(1.0) !important;
+        transition: none !important;
+      }
+      .choreography-item, .mask-reveal-child, .gold-expanding-rule {
+        opacity: 1 !important;
+        transform: none !important;
+        width: 100% !important;
+        transition: none !important;
+      }
+      .seal-cracked .seal-half-left, .seal-cracked .seal-half-right {
+        opacity: 0 !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -251,66 +510,176 @@
   <canvas id="petalCanvas" class="fixed inset-0 pointer-events-none z-30 w-full h-full"></canvas>
 
   <!-- ========================================================================= -->
-  <!-- 1. CINEMATIC 3D ROYAL GATES & WAX SEAL OVERLAY (Higher Quality than Video) -->
+  <!-- 1. CINEMATIC LUXURY PRELOADER (Monogram Stroke Drawing) -->
   <!-- ========================================================================= -->
-  <div id="curtainOverlay" class="fixed inset-0 z-50 overflow-hidden flex items-center justify-center">
-    
-    <!-- Left Royal Gate Panel with Damask Texture & Gold Arch Trim -->
-    <div class="curtain-panel-left absolute top-0 bottom-0 left-0 w-1/2 bg-stone-900 border-r border-champagne-400/40 z-10 flex items-center justify-end overflow-hidden"
-         style="background-image: linear-gradient(to right, rgba(4,20,15,0.92), rgba(8,32,24,0.96)), url('./444.jpg'); background-size: cover; background-position: right center;">
-      <!-- Subtle Decorative Palace Arch Filigree Outline -->
-      <div class="opacity-15 w-80 h-[80vh] border-4 border-champagne-300 rounded-r-full -mr-20 pointer-events-none"></div>
+  <div id="preloaderOverlay">
+    <div class="flex flex-col items-center">
+      <svg class="w-24 h-24 sm:w-28 sm:h-28" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="54" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.3" />
+        <circle cx="60" cy="60" r="50" stroke="#D4AF37" stroke-width="1" stroke-dasharray="4 4" stroke-opacity="0.6" />
+        <!-- Monogram A&M Luxury Stroke Path -->
+        <path class="monogram-path" d="M38 82 L50 38 L62 82 M42 70 L58 70" stroke="#DEC47B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path class="monogram-path" d="M58 54 Q64 48 67 55 Q70 63 60 72 Q56 75 62 77 Q69 77 72 71" stroke="#D4AF37" stroke-width="1.8" stroke-linecap="round" />
+        <path class="monogram-path" d="M70 82 L70 42 L80 62 L90 42 L90 82" stroke="#DEC47B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <div class="mt-4 flex items-center gap-2">
+        <span class="w-1 h-1 rounded-full bg-champagne-400 animate-ping"></span>
+        <span class="font-cinzel text-[11px] uppercase tracking-[0.3em] text-champagne-300">Royal Invitation</span>
+        <span class="w-1 h-1 rounded-full bg-champagne-400 animate-ping"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Warm Light Flash Overlay upon Seal Crack -->
+  <div id="sealFlash"></div>
+
+  <!-- 3D Rajasthani Jharokha Palace Doors (Swinging Open in 3D Perspective) -->
+  <div id="palaceDoorsContainer">
+    <!-- Left Door -->
+    <div class="jharokha-door jharokha-door-left">
+      <div class="absolute inset-0 bg-gradient-to-r from-emerald-950 via-[#061e16] to-[#04140F]"></div>
+      <!-- Inline SVG Rajasthani Jharokha Filigree -->
+      <svg class="w-full h-full opacity-35" viewBox="0 0 200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="goldFiligree" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FAF6E8" stop-opacity="0.8"/>
+            <stop offset="50%" stop-color="#D4AF37" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#8E6E16" stop-opacity="0.6"/>
+          </linearGradient>
+        </defs>
+        <!-- Outer Border -->
+        <rect x="10" y="10" width="180" height="380" rx="8" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <!-- Arch Filigree -->
+        <path d="M 25 380 L 25 150 C 25 70, 100 40, 190 40" fill="none" stroke="url(#goldFiligree)" stroke-width="2" />
+        <path d="M 40 380 L 40 160 C 40 90, 105 60, 190 60" fill="none" stroke="url(#goldFiligree)" stroke-width="1" stroke-dasharray="3 3" />
+        <!-- Jharokha Cusps / Scallops -->
+        <path d="M 25 160 Q 40 145 60 150 Q 80 135 100 135 Q 125 110 150 110 Q 175 75 190 75" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <!-- Palace Lattice Jali grid -->
+        <g stroke="url(#goldFiligree)" stroke-width="0.5" opacity="0.4">
+          <line x1="25" y1="200" x2="190" y2="200" />
+          <line x1="25" y1="230" x2="190" y2="230" />
+          <line x1="25" y1="260" x2="190" y2="260" />
+          <line x1="25" y1="290" x2="190" y2="290" />
+          <line x1="25" y1="320" x2="190" y2="320" />
+          <line x1="25" y1="350" x2="190" y2="350" />
+          <line x1="60" y1="180" x2="60" y2="380" />
+          <line x1="100" y1="160" x2="100" y2="380" />
+          <line x1="140" y1="140" x2="140" y2="380" />
+          <line x1="180" y1="120" x2="180" y2="380" />
+        </g>
+        <!-- Center Emblem -->
+        <circle cx="150" cy="240" r="28" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <circle cx="150" cy="240" r="20" fill="none" stroke="url(#goldFiligree)" stroke-width="0.8" stroke-dasharray="2 2" />
+      </svg>
     </div>
 
-    <!-- Right Royal Gate Panel -->
-    <div class="curtain-panel-right absolute top-0 bottom-0 right-0 w-1/2 bg-stone-900 border-l border-champagne-400/40 z-10 flex items-center justify-start overflow-hidden"
-         style="background-image: linear-gradient(to left, rgba(4,20,15,0.92), rgba(8,32,24,0.96)), url('./444.jpg'); background-size: cover; background-position: left center;">
-      <div class="opacity-15 w-80 h-[80vh] border-4 border-champagne-300 rounded-l-full -ml-20 pointer-events-none"></div>
+    <!-- Right Door -->
+    <div class="jharokha-door jharokha-door-right">
+      <div class="absolute inset-0 bg-gradient-to-l from-emerald-950 via-[#061e16] to-[#04140F]"></div>
+      <!-- Inline SVG Filigree Mirrored -->
+      <svg class="w-full h-full opacity-35" viewBox="0 0 200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="180" height="380" rx="8" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <path d="M 175 380 L 175 150 C 175 70, 100 40, 10 40" fill="none" stroke="url(#goldFiligree)" stroke-width="2" />
+        <path d="M 160 380 L 160 160 C 160 90, 95 60, 10 60" fill="none" stroke="url(#goldFiligree)" stroke-width="1" stroke-dasharray="3 3" />
+        <path d="M 175 160 Q 160 145 140 150 Q 120 135 100 135 Q 75 110 50 110 Q 25 75 10 75" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <g stroke="url(#goldFiligree)" stroke-width="0.5" opacity="0.4">
+          <line x1="10" y1="200" x2="175" y2="200" />
+          <line x1="10" y1="230" x2="175" y2="230" />
+          <line x1="10" y1="260" x2="175" y2="260" />
+          <line x1="10" y1="290" x2="175" y2="290" />
+          <line x1="10" y1="320" x2="175" y2="320" />
+          <line x1="10" y1="350" x2="175" y2="350" />
+          <line x1="140" y1="180" x2="140" y2="380" />
+          <line x1="100" y1="160" x2="100" y2="380" />
+          <line x1="60" y1="140" x2="60" y2="380" />
+          <line x1="20" y1="120" x2="20" y2="380" />
+        </g>
+        <circle cx="50" cy="240" r="28" fill="none" stroke="url(#goldFiligree)" stroke-width="1.5" />
+        <circle cx="50" cy="240" r="20" fill="none" stroke="url(#goldFiligree)" stroke-width="0.8" stroke-dasharray="2 2" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 2. SEALED STATE OVERLAY (Deep Emerald + Gold Invitation Card + Wax Seal) -->
+  <!-- ========================================================================= -->
+  <div id="sealedOverlay">
+    <!-- Skip Intro Control (Appears after 1.5s) -->
+    <button id="skipIntroBtn" aria-label="Skip Introduction">
+      Skip Intro ➔
+    </button>
+
+    <!-- CSS Gold Dust Specks (Drifting upward) -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden" id="goldDustContainer">
+      <div class="gold-dust-speck" style="left: 15%; top: 75%; animation-delay: 0s;"></div>
+      <div class="gold-dust-speck" style="left: 30%; top: 82%; animation-delay: 1.2s;"></div>
+      <div class="gold-dust-speck" style="left: 45%; top: 70%; animation-delay: 2.5s;"></div>
+      <div class="gold-dust-speck" style="left: 60%; top: 88%; animation-delay: 0.8s;"></div>
+      <div class="gold-dust-speck" style="left: 78%; top: 76%; animation-delay: 3.1s;"></div>
+      <div class="gold-dust-speck" style="left: 88%; top: 84%; animation-delay: 1.7s;"></div>
+      <div class="gold-dust-speck" style="left: 22%; top: 65%; animation-delay: 4.2s;"></div>
+      <div class="gold-dust-speck" style="left: 38%; top: 92%; animation-delay: 2.1s;"></div>
+      <div class="gold-dust-speck" style="left: 52%; top: 60%; animation-delay: 3.7s;"></div>
+      <div class="gold-dust-speck" style="left: 70%; top: 90%; animation-delay: 4.8s;"></div>
+      <div class="gold-dust-speck" style="left: 82%; top: 68%; animation-delay: 1.9s;"></div>
+      <div class="gold-dust-speck" style="left: 10%; top: 80%; animation-delay: 3.4s;"></div>
     </div>
 
-    <!-- Center Wax Seal & Royal Invitation Medallion -->
-    <div id="sealMedallionWrapper" class="relative z-20 flex flex-col items-center justify-center px-6 text-center max-w-sm transition-all duration-700">
-      
-      <!-- Auspicious Inscription Card -->
-      <div class="p-6 sm:p-8 rounded-3xl royal-glass-dark border-2 border-champagne-400 shadow-2xl backdrop-blur-2xl text-stone-100 flex flex-col items-center gold-gradient-border">
+    <!-- Centered Gold-Foil-Bordered Invitation Card -->
+    <div id="sealedCardWrapper" class="relative z-10 w-full max-w-[340px] sm:max-w-sm px-4">
+      <div class="p-6 sm:p-8 rounded-3xl bg-[#082018] border border-champagne-400/70 shadow-2xl text-stone-100 flex flex-col items-center gold-gradient-border relative">
         
-        <span class="text-champagne-400 font-serif tracking-[0.25em] text-[11px] uppercase mb-1 flex items-center gap-1.5">
+        <!-- Auspicious Tag / Guest Personalization Hook -->
+        <span id="sealedGuestTag" class="text-champagne-400 font-serif tracking-[0.25em] text-[11px] uppercase mb-1 flex items-center gap-1.5">
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-          शुभ विवाह • The Royal Invitation
+          शुभ विवाह • Royal Invitation
           <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
         </span>
 
         <p class="font-serif italic text-stone-300 text-xs mt-1">Together with their families</p>
         
-        <h1 class="font-cinzel text-3xl sm:text-4xl font-bold tracking-wider text-champagne-200 mt-2 mb-1">
-          AARAV <span class="font-brush text-4xl sm:text-5xl text-champagne-400 font-normal">&amp;</span> MEERA
-        </h1>
+        <div class="font-cinzel text-2xl sm:text-3xl font-bold tracking-wider text-champagne-200 mt-2 mb-1">
+          AARAV <span class="font-brush text-3xl sm:text-4xl text-champagne-400 font-normal">&amp;</span> MEERA
+        </div>
 
         <div class="ornament-divider w-full my-3 text-champagne-400 text-xs">✦ ⚜ ✦</div>
 
-        <p class="text-[11px] font-sans uppercase tracking-[0.2em] text-champagne-300 font-semibold mb-6">
+        <p class="text-[10px] sm:text-[11px] font-sans uppercase tracking-[0.2em] text-champagne-300 font-semibold mb-6">
           November 28 - 29, 2026 • Udaipur, India
         </p>
 
-        <!-- 3D Wax Seal Button with Monogram -->
+        <!-- 3D Wax Seal with Realistic Pulse, Drag/Tap Trigger & Split Halves -->
         <div class="relative my-2">
           <!-- Soft Golden Glow Ring behind Seal -->
-          <div class="absolute inset-0 rounded-full bg-champagne-400 blur-xl opacity-40 animate-pulse"></div>
+          <div class="wax-seal-glow-ring"></div>
 
-          <button id="openGatesBtn" class="wax-seal-button relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-2 flex items-center justify-center cursor-pointer group focus:outline-none" title="Click to Open Royal Invitation">
-            
-            <!-- Inner Medallion Engraving -->
-            <div class="w-full h-full rounded-full border-2 border-amber-200/50 flex flex-col items-center justify-center shadow-inner text-amber-50">
-              <span class="font-cinzel font-bold text-2xl sm:text-3xl tracking-tight text-amber-100 drop-shadow-md">A&amp;M</span>
-              <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-amber-200 opacity-90 -mt-1 group-hover:tracking-[0.25em] transition-all">OPEN</span>
-            </div>
-          </button>
+          <div id="waxSealContainer" class="wax-seal-wrapper" title="Tap the seal to open">
+            <button id="openWaxSealBtn" class="wax-seal-base relative focus:outline-none" aria-label="Open Royal Invitation">
+              
+              <!-- Left Seal Half -->
+              <div class="seal-half seal-half-left">
+                <div class="w-full h-full rounded-full border-2 border-amber-200/50 flex flex-col items-center justify-center shadow-inner text-amber-50">
+                  <span class="font-cinzel font-bold text-2xl tracking-tight text-amber-100 drop-shadow-md">A&amp;M</span>
+                  <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-amber-200 opacity-90 -mt-0.5">OPEN</span>
+                </div>
+              </div>
+
+              <!-- Right Seal Half -->
+              <div class="seal-half seal-half-right">
+                <div class="w-full h-full rounded-full border-2 border-amber-200/50 flex flex-col items-center justify-center shadow-inner text-amber-50">
+                  <span class="font-cinzel font-bold text-2xl tracking-tight text-amber-100 drop-shadow-md">A&amp;M</span>
+                  <span class="text-[9px] font-bold tracking-[0.2em] uppercase text-amber-200 opacity-90 -mt-0.5">OPEN</span>
+                </div>
+              </div>
+
+            </button>
+          </div>
         </div>
 
-        <div class="mt-4 flex items-center gap-2 text-champagne-300/90 text-xs font-serif italic animate-bounce">
-          <i data-lucide="heart" class="w-3.5 h-3.5 fill-champagne-400"></i>
-          <span>Tap the Wax Seal to Open</span>
-          <i data-lucide="heart" class="w-3.5 h-3.5 fill-champagne-400"></i>
+        <div class="mt-4 flex items-center gap-1.5 text-champagne-300 text-xs font-serif italic">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-champagne-400"></i>
+          <span>Tap the seal to open</span>
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-champagne-400"></i>
         </div>
 
       </div>
@@ -371,8 +740,8 @@
   <section id="hero" class="relative min-h-screen flex items-center justify-center pt-24 pb-20 px-4 overflow-hidden">
     
     <!-- Background Royal Palace Arches & Couple Imagery (Using local 111.png & 333.jpg) -->
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-100"
+    <div class="absolute inset-0 z-0 overflow-hidden">
+      <div id="heroBgImg" class="absolute inset-0 bg-cover bg-center bg-no-repeat ken-burns-hero"
            style="background-image: url('./111.png'), url('./333.jpg');">
       </div>
       <!-- Soft Ethereal Royal Overlay Gradients -->
@@ -381,7 +750,7 @@
     </div>
 
     <!-- Ethereal Floating Hanging Lanterns (Antigravity Vibe) -->
-    <div class="absolute top-14 left-6 md:left-20 pointer-events-none z-10 animate-float-slow opacity-85 hidden sm:block">
+    <div id="lanternLeft" class="absolute top-14 left-6 md:left-20 pointer-events-none z-10 animate-float-slow opacity-85 hidden sm:block choreography-item" style="transition-delay: 600ms;">
       <div class="flex flex-col items-center">
         <div class="w-0.5 h-16 bg-gradient-to-b from-champagne-500 to-amber-300"></div>
         <div class="w-12 h-16 rounded-2xl bg-gradient-to-b from-champagne-200/50 to-amber-500/30 backdrop-blur-md border border-champagne-400 flex items-center justify-center shadow-2xl">
@@ -390,7 +759,7 @@
       </div>
     </div>
 
-    <div class="absolute top-20 right-6 md:right-20 pointer-events-none z-10 animate-float-delayed opacity-85 hidden sm:block">
+    <div id="lanternRight" class="absolute top-20 right-6 md:right-20 pointer-events-none z-10 animate-float-delayed opacity-85 hidden sm:block choreography-item" style="transition-delay: 700ms;">
       <div class="flex flex-col items-center">
         <div class="w-0.5 h-20 bg-gradient-to-b from-champagne-500 to-amber-300"></div>
         <div class="w-11 h-14 rounded-2xl bg-gradient-to-b from-champagne-200/50 to-amber-500/30 backdrop-blur-md border border-champagne-400 flex items-center justify-center shadow-2xl">
@@ -400,10 +769,10 @@
     </div>
 
     <!-- Hero Content -->
-    <div class="relative z-20 max-w-3xl mx-auto text-center flex flex-col items-center mt-6">
+    <div id="heroContent" class="relative z-20 max-w-3xl mx-auto text-center flex flex-col items-center mt-6">
       
       <!-- Auspicious Sanskrit Badge -->
-      <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full royal-glass border border-champagne-400/80 shadow-md mb-6">
+      <div class="choreography-item inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full royal-glass border border-champagne-400/80 shadow-md mb-6" style="transition-delay: 100ms;">
         <span class="w-1.5 h-1.5 rounded-full bg-champagne-500"></span>
         <span class="font-serif italic text-emerald-950 text-xs md:text-sm tracking-wider">
           ॐ श्री गणेशाय नमः • Together with their families
@@ -412,32 +781,38 @@
       </div>
 
       <!-- Grand Welcome Subtitle -->
-      <p class="font-serif text-stone-700 text-sm md:text-lg tracking-wider italic max-w-xl mb-4 leading-relaxed">
+      <p class="choreography-item font-serif text-stone-700 text-sm md:text-lg tracking-wider italic max-w-xl mb-4 leading-relaxed" style="transition-delay: 200ms;">
         We joyfully invite you to witness and celebrate the sacred wedding union of
       </p>
 
-      <!-- Royal Couple Names with Shimmer Gradient -->
+      <!-- Royal Couple Names with Shimmer Gradient & Mask Reveals -->
       <div class="relative py-2 my-1">
-        <h1 class="font-cinzel text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-emerald-950 leading-none">
-          AARAV
-        </h1>
-        <div class="font-script text-6xl sm:text-7xl md:text-8xl text-champagne-500 my-1 md:-my-3 select-none">
+        <div class="mask-reveal-wrap">
+          <h1 class="mask-reveal-child font-cinzel text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-emerald-950 leading-none" style="transition-delay: 300ms;">
+            AARAV
+          </h1>
+        </div>
+        <div class="choreography-item font-script text-6xl sm:text-7xl md:text-8xl text-champagne-500 my-1 md:-my-3 select-none" style="transition-delay: 420ms;">
           &amp;
         </div>
-        <h1 class="font-cinzel text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-emerald-950 leading-none">
-          MEERA
-        </h1>
+        <div class="mask-reveal-wrap">
+          <h1 class="mask-reveal-child font-cinzel text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-emerald-950 leading-none" style="transition-delay: 540ms;">
+            MEERA
+          </h1>
+        </div>
       </div>
 
-      <!-- Ornamental Divider with Auspicious Date -->
-      <div class="ornament-divider w-full max-w-md my-6 text-champagne-500 text-base">
-        <span>✦</span>
-        <span class="font-cinzel text-xs uppercase tracking-[0.25em] text-emerald-900 font-bold px-2">November 28 &amp; 29, 2026</span>
-        <span>✦</span>
+      <!-- Ornamental Divider with Auspicious Date Expanding Rule -->
+      <div class="gold-expanding-rule max-w-md my-6 text-center" style="transition-delay: 660ms;">
+        <div class="ornament-divider w-full text-champagne-500 text-base">
+          <span>✦</span>
+          <span class="font-cinzel text-xs uppercase tracking-[0.25em] text-emerald-900 font-bold px-2">November 28 &amp; 29, 2026</span>
+          <span>✦</span>
+        </div>
       </div>
 
       <!-- Venue & Destination Line -->
-      <div class="flex items-center justify-center gap-2 text-stone-700 text-xs sm:text-sm font-medium mb-8 bg-white/60 px-4 py-2 rounded-full border border-champagne-300 shadow-sm">
+      <div class="choreography-item flex items-center justify-center gap-2 text-stone-700 text-xs sm:text-sm font-medium mb-8 bg-white/60 px-4 py-2 rounded-full border border-champagne-300 shadow-sm" style="transition-delay: 780ms;">
         <i data-lucide="map-pin" class="w-4 h-4 text-champagne-600"></i>
         <span>The Oberoi Udaivilas • Lake Pichola, Udaipur, Rajasthan</span>
       </div>
@@ -445,7 +820,7 @@
       <!-- ========================================================================= -->
       <!-- COUNTDOWN TIMER (Circular Glass Medallions with Gold Leaf Trim) -->
       <!-- ========================================================================= -->
-      <div class="w-full max-w-lg p-6 sm:p-7 rounded-3xl royal-glass mb-9 gold-gradient-border shadow-2xl">
+      <div class="choreography-item w-full max-w-lg p-6 sm:p-7 rounded-3xl royal-glass mb-9 gold-gradient-border shadow-2xl" style="transition-delay: 900ms;">
         <div class="text-center mb-4">
           <span class="font-cinzel text-xs uppercase tracking-[0.2em] text-emerald-900 font-bold flex items-center justify-center gap-2">
             <i data-lucide="hourglass" class="w-3.5 h-3.5 text-champagne-600"></i>
@@ -481,7 +856,7 @@
       </div>
 
       <!-- Quick Action Buttons -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+      <div class="choreography-item flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md" style="transition-delay: 1020ms;">
         <a href="#rsvp" class="w-full sm:w-auto flex-1 min-h-[50px] px-8 py-3.5 rounded-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-champagne-200 font-bold text-xs tracking-[0.2em] uppercase shadow-2xl hover:shadow-emerald-900/50 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 border border-champagne-400 group">
           <span>RSVP Now</span>
           <i data-lucide="sparkles" class="w-4 h-4 text-champagne-400 group-hover:rotate-45 transition-transform"></i>
@@ -493,7 +868,7 @@
       </div>
 
       <!-- Smooth Scroll Down Cue -->
-      <a href="#story" class="mt-14 text-stone-500 hover:text-champagne-600 transition-colors flex flex-col items-center gap-1 group">
+      <a href="#story" class="choreography-item mt-14 text-stone-500 hover:text-champagne-600 transition-colors flex flex-col items-center gap-1 group" style="transition-delay: 1140ms;">
         <span class="text-[10px] uppercase tracking-[0.25em] font-cinzel font-bold text-stone-500 group-hover:text-stone-800">Explore Wedding</span>
         <i data-lucide="chevron-down" class="w-5 h-5 animate-bounce text-champagne-600 mt-1"></i>
       </a>
@@ -1420,35 +1795,162 @@
     lucide.createIcons();
 
     /* -------------------------------------------------------------
-       1. CINEMATIC CURTAIN & WAX SEAL UNROLLING (Video Reference)
+       1. PHASE 1: PRELOADER & CINEMATIC OPENING SEQUENCE
        ------------------------------------------------------------- */
-    const curtainOverlay = document.getElementById('curtainOverlay');
-    const openGatesBtn = document.getElementById('openGatesBtn');
+    const preloaderOverlay = document.getElementById('preloaderOverlay');
+    const sealedOverlay = document.getElementById('sealedOverlay');
+    const skipIntroBtn = document.getElementById('skipIntroBtn');
+    const openWaxSealBtn = document.getElementById('openWaxSealBtn');
+    const waxSealContainer = document.getElementById('waxSealContainer');
+    const palaceDoorsContainer = document.getElementById('palaceDoorsContainer');
+    const sealFlash = document.getElementById('sealFlash');
+    const heroBgImg = document.getElementById('heroBgImg');
+    const heroSection = document.getElementById('hero');
 
-    openGatesBtn.addEventListener('click', () => {
-      // Audio Chime / Gong note
-      playBellSound();
+    const urlParams = new URLSearchParams(window.location.search);
+    const shouldSkip = urlParams.get('skip') === '1' || sessionStorage.getItem('invitation_opened') === 'true';
 
-      // Confetti Cannon Burst
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 90,
-          spread: 80,
-          origin: { y: 0.6 },
-          colors: ['#D4AF37', '#FAF8F1', '#082018', '#DEC47B', '#6E131E']
-        });
+    // Step 1: Preloader with document.fonts.ready and hero image decode (max 1.2s timeout, 3s safety)
+    let preloaderDismissed = false;
+    function dismissPreloader() {
+      if (preloaderDismissed) return;
+      preloaderDismissed = true;
+      if (preloaderOverlay) {
+        preloaderOverlay.classList.add('preloader-done');
+        setTimeout(() => {
+          preloaderOverlay.style.display = 'none';
+        }, 500);
+      }
+    }
+
+    const heroImgPreload = new Image();
+    heroImgPreload.src = './111.png';
+    const heroDecodePromise = (heroImgPreload.decode ? heroImgPreload.decode() : Promise.resolve()).catch(() => {});
+    const fontsReadyPromise = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+
+    Promise.race([
+      Promise.all([heroDecodePromise, fontsReadyPromise]),
+      new Promise(resolve => setTimeout(resolve, 1200)) // Max 1.2s for optimal UX
+    ]).then(dismissPreloader);
+    setTimeout(dismissPreloader, 2500); // Strict safety fallback
+
+    // Step 2: Skip button appears after 1.5s
+    setTimeout(() => {
+      if (skipIntroBtn && !sessionStorage.getItem('invitation_opened')) {
+        skipIntroBtn.classList.add('visible');
+      }
+    }, 1500);
+
+    // Fast-path for users who already opened in this session or ?skip=1
+    if (shouldSkip) {
+      if (preloaderOverlay) preloaderOverlay.style.display = 'none';
+      if (sealedOverlay) sealedOverlay.style.display = 'none';
+      if (palaceDoorsContainer) palaceDoorsContainer.style.display = 'none';
+      if (heroBgImg) heroBgImg.classList.add('ken-burns-settled');
+      if (heroSection) heroSection.classList.add('choreography-active');
+    }
+
+    // Step 3: Trigger Sequence on Tap/Drag of Wax Seal
+    let sequenceTriggered = false;
+    function triggerOpeningSequence() {
+      if (sequenceTriggered) return;
+      sequenceTriggered = true;
+      sessionStorage.setItem('invitation_opened', 'true');
+
+      // Haptic feedback
+      if (navigator.vibrate) {
+        try { navigator.vibrate(15); } catch (e) {}
       }
 
-      // Open Gate Curtains with 3D unroll
-      curtainOverlay.classList.add('curtains-open');
-      
-      // Auto-start ambient acoustic raga melody
+      // Audio start (required user gesture)
+      playBellSound();
       initAndToggleAudio(true);
 
+      // Wax Seal cracks into two halves
+      if (openWaxSealBtn) {
+        openWaxSealBtn.classList.add('seal-cracked');
+      }
+
+      // Warm light flash
+      if (sealFlash) {
+        sealFlash.classList.add('flash-active');
+        setTimeout(() => {
+          sealFlash.classList.remove('flash-active');
+        }, 400);
+      }
+
+      // Hide sealed state card and start door swing
       setTimeout(() => {
-        curtainOverlay.remove();
-      }, 1400);
-    });
+        if (sealedOverlay) {
+          sealedOverlay.classList.add('sealed-fade-out');
+        }
+        if (palaceDoorsContainer) {
+          palaceDoorsContainer.classList.add('doors-swinging');
+        }
+
+        // Ken Burns settle on hero photo
+        if (heroBgImg) {
+          heroBgImg.classList.add('ken-burns-settled');
+        }
+
+        // Reveal Choreography staggered
+        setTimeout(() => {
+          if (heroSection) {
+            heroSection.classList.add('choreography-active');
+          }
+
+          // Single celebratory petal burst (max 40 particles)
+          if (typeof confetti === 'function') {
+            confetti({
+              particleCount: 38,
+              spread: 70,
+              origin: { y: 0.55 },
+              colors: ['#D4AF37', '#FAF6E8', '#DEC47B', '#8E6E16', '#BF434D'],
+              disableForReducedMotion: true
+            });
+          }
+        }, 300);
+
+        // Remove doors container after animation completes
+        setTimeout(() => {
+          if (sealedOverlay) sealedOverlay.style.display = 'none';
+          if (palaceDoorsContainer) palaceDoorsContainer.style.display = 'none';
+        }, 1500);
+
+      }, 380);
+    }
+
+    if (openWaxSealBtn) {
+      openWaxSealBtn.addEventListener('click', triggerOpeningSequence);
+    }
+    if (skipIntroBtn) {
+      skipIntroBtn.addEventListener('click', () => {
+        dismissPreloader();
+        triggerOpeningSequence();
+      });
+    }
+
+    // Optional Drag-up to open fallback
+    let touchStartY = null;
+    if (waxSealContainer) {
+      waxSealContainer.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      waxSealContainer.addEventListener('touchmove', (e) => {
+        if (!touchStartY) return;
+        const currentY = e.touches[0].clientY;
+        const diffY = touchStartY - currentY;
+        if (diffY > 40) { // Dragged upward 40px
+          touchStartY = null;
+          triggerOpeningSequence();
+        }
+      }, { passive: true });
+
+      waxSealContainer.addEventListener('touchend', () => {
+        touchStartY = null;
+      }, { passive: true });
+    }
 
     /* -------------------------------------------------------------
        2. ETHEREAL CANVAS: 3D Fluttering Petals & Golden Stardust
@@ -1527,14 +2029,31 @@
       particles.push(p);
     }
 
+    let petalRafId = null;
+    let isTabVisible = !document.hidden;
+
     function animatePetals() {
+      if (!isTabVisible) return;
       ctx.clearRect(0, 0, width, height);
       particles.forEach(p => {
         p.update();
         p.draw();
       });
-      requestAnimationFrame(animatePetals);
+      petalRafId = requestAnimationFrame(animatePetals);
     }
+
+    document.addEventListener('visibilitychange', () => {
+      isTabVisible = !document.hidden;
+      if (isTabVisible) {
+        if (!petalRafId) animatePetals();
+      } else {
+        if (petalRafId) {
+          cancelAnimationFrame(petalRafId);
+          petalRafId = null;
+        }
+      }
+    });
+
     animatePetals();
 
     /* -------------------------------------------------------------
