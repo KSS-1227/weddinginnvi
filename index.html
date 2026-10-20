@@ -525,6 +525,220 @@
       transform-origin: center center;
     }
 
+    /* ========================================================================= */
+    /* SAVE THE DATE 3D GOLD-FOIL SCRATCH CARD STYLES */
+    /* ========================================================================= */
+    .scratch-perspective-container {
+      perspective: 1000px;
+      perspective-origin: center center;
+    }
+    .scratch-3d-card {
+      width: min(88vw, 360px);
+      aspect-ratio: 4 / 5;
+      border-radius: 28px;
+      position: relative;
+      transform-style: preserve-3d;
+      will-change: transform;
+      user-select: none;
+      -webkit-user-select: none;
+      margin: 0 auto;
+    }
+
+    /* Floor Shadow (translateZ -40px) */
+    .scratch-floor-shadow {
+      position: absolute;
+      inset: 6% 8% -34px 8%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(4, 20, 15, 0.48) 0%, rgba(8, 32, 24, 0.25) 45%, transparent 70%);
+      transform: translateZ(-40px);
+      filter: blur(10px);
+      pointer-events: none;
+      transition: filter 0.2s ease-out, transform 0.1s ease-out;
+      z-index: 1;
+    }
+
+    /* 3 Stacked Edge Layers for Visible Physical Thickness */
+    .scratch-card-edge-1 {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      background: #705510;
+      transform: translateZ(-2px);
+      box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.7);
+      pointer-events: none;
+    }
+    .scratch-card-edge-2 {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      background: #503c08;
+      transform: translateZ(-4px);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.85);
+      pointer-events: none;
+    }
+    .scratch-card-edge-3 {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      background: #342504;
+      transform: translateZ(-6px);
+      box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.95), 0 20px 45px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+    }
+
+    /* Card Body (translateZ 0px) */
+    .scratch-card-body {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      background: linear-gradient(150deg, #04140F 0%, #082018 40%, #0f3d2f 85%, #04140F 100%);
+      border: 2px solid #D4AF37;
+      box-shadow: inset 0 0 0 3px #5E460B, inset 0 0 0 5px rgba(244, 236, 208, 0.8), inset 0 0 28px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+      transform: translateZ(0px);
+    }
+
+    /* Inner Arch & Corner Flourishes SVG layer */
+    .scratch-card-ornament {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Date Layer (translateZ 14px) */
+    .scratch-date-layer {
+      position: absolute;
+      inset: 0;
+      transform: translateZ(14px);
+      transform-style: preserve-3d;
+      z-index: 4;
+      pointer-events: auto;
+      transition: transform 0.1s ease-out;
+    }
+
+    /* Embossed numerals in Cinzel with layered highlights */
+    .scratch-date-digit {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      color: #FDF8ED;
+      text-shadow: 
+        0 1px 0 rgba(255, 255, 255, 0.85),
+        0 -1px 0 rgba(0, 0, 0, 0.9),
+        0 2px 4px rgba(0, 0, 0, 0.85),
+        0 0 18px rgba(212, 175, 55, 0.65);
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Shimmer effect across revealed numerals */
+    .date-num-shimmer {
+      background: linear-gradient(120deg, #FDF8ED 0%, #D4AF37 35%, #FFFFFF 50%, #D4AF37 65%, #FDF8ED 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: goldShimmer 3.5s ease-in-out infinite;
+    }
+
+    /* Foil Canvas (translateZ 22px) */
+    .scratch-foil-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      transform: translateZ(22px);
+      touch-action: none; /* Pointer only, allows normal page scrolling elsewhere */
+      cursor: crosshair;
+      z-index: 10;
+      transition: opacity 0.6s ease-out;
+      will-change: opacity;
+    }
+
+    /* Moving Specular Glare (translateZ 24px) */
+    .scratch-specular-glare {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      transform: translateZ(24px);
+      pointer-events: none;
+      z-index: 12;
+      background: linear-gradient(118deg, transparent 25%, rgba(255, 255, 255, 0.0) 38%, rgba(255, 255, 255, 0.38) 48%, rgba(255, 248, 220, 0.6) 50%, rgba(255, 255, 255, 0.2) 53%, transparent 68%);
+      background-size: 250% 250%;
+      background-position: 50% 50%;
+      mix-blend-mode: screen;
+      opacity: 0.75;
+      transition: opacity 0.5s ease-out;
+    }
+
+    /* Expanding Gold Ring Pulse upon Reveal */
+    .scratch-reveal-pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120px;
+      height: 120px;
+      margin-left: -60px;
+      margin-top: -60px;
+      border-radius: 50%;
+      border: 3px solid #FDF6DC;
+      box-shadow: 0 0 25px #D4AF37, inset 0 0 20px #D4AF37;
+      pointer-events: none;
+      z-index: 15;
+      opacity: 0;
+      transform: translateZ(26px) scale(0.5);
+    }
+
+    /* Idle Hint Animated Glowing Dot */
+    .scratch-idle-hint {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFFFFF 15%, #F4ECD0 45%, #D4AF37 80%, transparent 100%);
+      box-shadow: 0 0 16px 4px rgba(255, 235, 170, 0.95);
+      pointer-events: none;
+      z-index: 14;
+      opacity: 0;
+      transform: translateZ(25px) translate(-50%, -50%);
+    }
+
+    /* Flake particles overlay container */
+    #scratchFlakesContainer {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 13;
+      transform: translateZ(23px);
+    }
+    .scratch-flake {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 1px;
+      background: linear-gradient(45deg, #FBF8F1, #D4AF37, #8E6E16);
+      box-shadow: 0 0 4px rgba(212, 175, 55, 0.85);
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    /* Screen Reader Visually Hidden */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
     /* Reduced Motion Accessibility Overrides */
     @media (prefers-reduced-motion: reduce) {
       .monogram-path {
@@ -532,6 +746,16 @@
         animation: none !important;
       }
       .wax-seal-base, .wax-seal-glow-ring, .gold-dust-speck, .lantern-float {
+        animation: none !important;
+      }
+      .scratch-3d-card, .scratch-date-layer, .scratch-specular-glare, .scratch-floor-shadow {
+        transform: none !important;
+        transition: none !important;
+      }
+      .scratch-idle-hint, .scratch-flake, .scratch-reveal-pulse {
+        display: none !important;
+      }
+      .date-num-shimmer {
         animation: none !important;
       }
     }
@@ -693,8 +917,8 @@
 
           <div class="ornament-divider w-full my-3 text-champagne-400 text-xs">✦ ⚜ ✦</div>
 
-          <p class="text-[10px] sm:text-[11px] font-sans uppercase tracking-[0.2em] text-champagne-300 font-semibold mb-6">
-            November 28 - 29, 2026 • Udaipur, India
+          <p id="sealedTeaserLine" class="text-xs sm:text-sm font-serif uppercase tracking-[0.25em] text-champagne-300 font-semibold mb-6 flex items-center justify-center gap-2">
+            <span>✦ Save the Date ✦</span>
           </p>
         </div>
 
@@ -887,12 +1111,17 @@
         </span>
       </h1>
 
-      <!-- Expanding Gold Rule (4.80s) & Date Line -->
+      <!-- Expanding Gold Rule (4.80s) & Date Teaser -->
       <div class="w-48 sm:w-64 my-3 flex flex-col items-center">
         <div id="goldDateRule" class="gold-date-rule w-full h-[1px] bg-gradient-to-r from-transparent via-champagne-500 to-transparent"></div>
-        <p id="heroDateLine" class="font-cinzel text-[11px] sm:text-xs uppercase tracking-[0.25em] text-emerald-900 font-bold mt-2 opacity-0">
-          November 28 &amp; 29, 2026
-        </p>
+        <div id="heroDateLine" class="flex flex-col items-center mt-2 opacity-0">
+          <p class="font-cinzel text-[11px] sm:text-xs uppercase tracking-[0.25em] text-champagne-700 font-bold">
+            ✦ Save the Date ✦
+          </p>
+          <span class="text-[10px] sm:text-[11px] font-serif italic text-emerald-900/80 tracking-widest mt-0.5">
+            Scratch below to reveal
+          </span>
+        </div>
       </div>
 
       <!-- Venue & City Line (5.40s) -->
@@ -906,14 +1135,14 @@
     <div class="relative z-20 flex flex-col items-center w-full max-w-xs mb-2">
       <!-- ONE Primary CTA -->
       <div id="heroCtaWrap" class="w-full opacity-0" style="transform: translateY(16px);">
-        <a href="#countdown-section" class="w-full min-h-[48px] px-8 py-3 rounded-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-champagne-200 font-bold text-xs tracking-[0.2em] uppercase shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 border border-champagne-400 group">
-          <span>Open Invitation</span>
+        <a href="#savedate" class="w-full min-h-[48px] px-8 py-3 rounded-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-champagne-200 font-bold text-xs tracking-[0.2em] uppercase shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 border border-champagne-400 group">
+          <span>Reveal Date</span>
           <i data-lucide="chevron-down" class="w-4 h-4 text-champagne-400 group-hover:translate-y-0.5 transition-transform"></i>
         </a>
       </div>
 
       <!-- Scroll Cue -->
-      <a href="#countdown-section" id="heroScrollCue" class="mt-4 text-stone-500 hover:text-champagne-600 transition-colors flex flex-col items-center gap-0.5 opacity-0">
+      <a href="#savedate" id="heroScrollCue" class="mt-4 text-stone-500 hover:text-champagne-600 transition-colors flex flex-col items-center gap-0.5 opacity-0">
         <span class="text-[9px] uppercase tracking-[0.25em] font-cinzel font-bold text-stone-500">Scroll to Explore</span>
         <i data-lucide="chevron-down" class="w-4 h-4 animate-bounce text-champagne-600"></i>
       </a>
@@ -922,55 +1151,244 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- DEDICATED COUNTDOWN TIMER SECTION (Moved below the fold for clean 100svh Hero) -->
+  <!-- 2.5 SAVE THE DATE SECTION: 3D Gold-Foil Scratch-to-Reveal Card -->
   <!-- ========================================================================= -->
-  <section id="countdown-section" class="relative py-12 px-4 bg-gradient-to-b from-ivory-100 to-champagne-50/60 flex flex-col items-center border-b border-champagne-300/40">
-    <div class="w-full max-w-lg p-6 sm:p-7 rounded-3xl royal-glass gold-gradient-border shadow-xl">
-      <div class="text-center mb-4">
-        <span class="font-cinzel text-xs uppercase tracking-[0.2em] text-emerald-900 font-bold flex items-center justify-center gap-2">
-          <i data-lucide="hourglass" class="w-3.5 h-3.5 text-champagne-600"></i>
-          Countdown to Our Forever
-          <i data-lucide="hourglass" class="w-3.5 h-3.5 text-champagne-600"></i>
-        </span>
-      </div>
+  <section id="savedate" class="relative w-full py-16 sm:py-24 px-4 bg-gradient-to-b from-ivory-100 via-champagne-50/70 to-ivory-200 border-b border-champagne-300/40 overflow-hidden flex flex-col items-center justify-center select-none" role="region" aria-label="Save the date, scratch card">
+    
+    <!-- Background Royal Ambient Glows -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
+      <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-champagne-300/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-80 h-80 bg-emerald-900/10 rounded-full blur-3xl"></div>
+    </div>
 
-      <!-- 4 Count Badges -->
-      <div class="grid grid-cols-4 gap-2.5 sm:gap-4 text-center">
+    <!-- Section Header -->
+    <div class="relative z-10 text-center max-w-md mx-auto mb-8 sm:mb-10">
+      <span class="text-xs uppercase tracking-[0.25em] text-champagne-600 font-bold font-cinzel">The Sacred Auspicious Muhurat</span>
+      <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-emerald-950 mt-1 mb-2">
+        Save the Date
+      </h2>
+      <div class="ornament-divider my-2.5 text-champagne-500 text-sm">✦ ⚜ ✦</div>
+      <p class="font-serif italic text-stone-600 text-sm sm:text-base">
+        Scratch the royal gold foil to uncover the auspicious celebration dates
+      </p>
+    </div>
+
+    <!-- 3D Perspective Card Wrapper -->
+    <div class="scratch-perspective-container relative z-10 w-full flex justify-center py-2" id="scratchCardContainer">
+      
+      <!-- The 3D Interactive Card (perspective 1000px, width min(88vw, 360px), aspect-ratio 4/5, border-radius 28px) -->
+      <div class="scratch-3d-card" id="scratchCard" style="transform: rotateX(0deg) rotateY(0deg);">
         
-        <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
-          <span id="daysCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
-          <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Days</span>
+        <!-- Layer 1: Floor Shadow (translateZ -40px) -->
+        <div class="scratch-floor-shadow" id="scratchFloorShadow"></div>
+
+        <!-- Layer 2: 3 Stacked Edge Layers for Physical Thickness -->
+        <div class="scratch-card-edge-3"></div>
+        <div class="scratch-card-edge-2"></div>
+        <div class="scratch-card-edge-1"></div>
+
+        <!-- Layer 2: Card Body (translateZ 0px) -->
+        <div class="scratch-card-body">
+          
+          <!-- Inner Arch & 4 Corner Flourishes (Rajasthani / Jharokha-Style SVG) -->
+          <svg class="scratch-card-ornament w-full h-full" viewBox="0 0 360 450" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="foilGoldGrad" x1="0" y1="0" x2="360" y2="450" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#D4AF37" />
+                <stop offset="50%" stop-color="#FDF6DC" />
+                <stop offset="100%" stop-color="#B59025" />
+              </linearGradient>
+            </defs>
+
+            <!-- Outer Filigree Border -->
+            <rect x="12" y="12" width="336" height="426" rx="20" stroke="url(#foilGoldGrad)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.6" />
+            <rect x="18" y="18" width="324" height="414" rx="16" stroke="url(#foilGoldGrad)" stroke-width="0.8" opacity="0.4" />
+
+            <!-- 4 Corner Flourishes -->
+            <!-- Top-Left -->
+            <g transform="translate(24, 24)" stroke="url(#foilGoldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.75">
+              <path d="M0 24 C 0 10, 10 0, 24 0 M4 16 C 4 8, 8 4, 16 4 M0 0 L 12 12" />
+              <circle cx="28" cy="4" r="2" fill="#D4AF37" />
+              <circle cx="4" cy="28" r="2" fill="#D4AF37" />
+            </g>
+            <!-- Top-Right -->
+            <g transform="translate(336, 24) scale(-1, 1)" stroke="url(#foilGoldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.75">
+              <path d="M0 24 C 0 10, 10 0, 24 0 M4 16 C 4 8, 8 4, 16 4 M0 0 L 12 12" />
+              <circle cx="28" cy="4" r="2" fill="#D4AF37" />
+              <circle cx="4" cy="28" r="2" fill="#D4AF37" />
+            </g>
+            <!-- Bottom-Left -->
+            <g transform="translate(24, 426) scale(1, -1)" stroke="url(#foilGoldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.75">
+              <path d="M0 24 C 0 10, 10 0, 24 0 M4 16 C 4 8, 8 4, 16 4 M0 0 L 12 12" />
+              <circle cx="28" cy="4" r="2" fill="#D4AF37" />
+              <circle cx="4" cy="28" r="2" fill="#D4AF37" />
+            </g>
+            <!-- Bottom-Right -->
+            <g transform="translate(336, 426) scale(-1, -1)" stroke="url(#foilGoldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.75">
+              <path d="M0 24 C 0 10, 10 0, 24 0 M4 16 C 4 8, 8 4, 16 4 M0 0 L 12 12" />
+              <circle cx="28" cy="4" r="2" fill="#D4AF37" />
+              <circle cx="4" cy="28" r="2" fill="#D4AF37" />
+            </g>
+
+            <!-- Jharokha Scalloped Arch Pinnacle & Frame -->
+            <path d="M 50 140 C 50 85, 95 50, 140 50 C 155 50, 170 40, 180 30 C 190 40, 205 50, 220 50 C 265 50, 310 85, 310 140 L 310 370 C 310 395, 290 415, 265 415 L 95 415 C 70 415, 50 395, 50 370 Z" stroke="url(#foilGoldGrad)" stroke-width="1.5" opacity="0.5" />
+            
+            <!-- Auspicious Kalash Pinnacle Motif -->
+            <circle cx="180" cy="24" r="4" fill="#D4AF37" />
+            <path d="M 174 24 Q 180 16 186 24 Z" fill="#FDF6DC" />
+          </svg>
+
         </div>
 
-        <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
-          <span id="hoursCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
-          <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Hours</span>
+        <!-- Layer 3: Date Layer (translateZ 14px) under the foil -->
+        <div class="scratch-date-layer flex flex-col items-center justify-between py-6 px-4" id="scratchDateLayer">
+          
+          <!-- Top Tag -->
+          <div class="flex flex-col items-center mt-1">
+            <span class="text-champagne-400 text-[11px] tracking-widest font-serif mb-0.5">✦ ॐ श्री गणेशाय नमः ✦</span>
+            <span class="font-cinzel text-[11px] sm:text-xs uppercase tracking-[0.3em] text-champagne-300 font-bold border-b border-champagne-400/40 pb-1">
+              SAVE THE DATE
+            </span>
+          </div>
+
+          <!-- Big 3D Embossed Numerals & Month/Day Info -->
+          <div class="my-auto flex flex-col items-center justify-center">
+            <div id="scratchDateNumerals" class="flex items-center justify-center gap-1 sm:gap-2 leading-none">
+              <span class="scratch-date-digit text-5xl sm:text-6xl" id="digit1">2</span>
+              <span class="scratch-date-digit text-5xl sm:text-6xl" id="digit2">8</span>
+              <span class="scratch-date-digit text-3xl sm:text-4xl text-champagne-400 mx-1 font-serif opacity-80" id="digitSep">·</span>
+              <span class="scratch-date-digit text-5xl sm:text-6xl" id="digit3">2</span>
+              <span class="scratch-date-digit text-5xl sm:text-6xl" id="digit4">9</span>
+            </div>
+
+            <!-- Month & Year -->
+            <div id="scratchMonthYear" class="font-cinzel text-base sm:text-lg font-bold tracking-[0.3em] text-champagne-200 mt-3 drop-shadow">
+              NOVEMBER 2026
+            </div>
+
+            <!-- Days -->
+            <div id="scratchDays" class="font-serif italic text-xs sm:text-sm text-champagne-300/90 tracking-widest mt-1">
+              Saturday &amp; Sunday
+            </div>
+          </div>
+
+          <!-- Bottom Couple & City Line -->
+          <div class="flex flex-col items-center w-full mb-1">
+            <div class="text-champagne-400 text-[10px] my-1">✦ ⚜ ✦</div>
+            <div id="scratchCoupleName" class="font-cinzel text-sm sm:text-base font-bold text-champagne-100 tracking-wider">
+              AARAV &amp; MEERA
+            </div>
+            <div id="scratchCityName" class="font-script text-2xl sm:text-3xl text-champagne-300 leading-tight">
+              Udaipur, Rajasthan
+            </div>
+            <div id="scratchVenueName" class="font-cinzel text-[9px] uppercase tracking-[0.2em] text-champagne-400/90 mt-0.5">
+              The Oberoi Udaivilas
+            </div>
+          </div>
+
+          <!-- Screen Reader Announcement (Visually Hidden Duplicate) -->
+          <div class="sr-only" id="srWeddingDate">
+            Save the Date: Aarav &amp; Meera Royal Wedding celebration in Udaipur, Rajasthan on Saturday November 28 and Sunday November 29, 2026 at The Oberoi Udaivilas.
+          </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
-          <span id="minsCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
-          <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Mins</span>
-        </div>
+        <!-- Layer 4: Foil Canvas (translateZ 22px) -->
+        <canvas id="scratchCanvas" class="scratch-foil-canvas" aria-hidden="true"></canvas>
 
-        <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
-          <span id="secsCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-champagne-600 leading-none animate-pulse">00</span>
-          <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Secs</span>
-        </div>
+        <!-- Layer 4.5: Flake particles container -->
+        <div id="scratchFlakesContainer"></div>
 
-      </div>
+        <!-- Layer 5: Moving Specular Glare (translateZ 24px) -->
+        <div class="scratch-specular-glare" id="scratchGlare"></div>
 
-      <!-- Quick Action Buttons inside Countdown Section -->
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full mt-6">
-        <a href="#rsvp" class="w-full sm:w-auto flex-1 min-h-[46px] px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-champagne-200 font-bold text-xs tracking-[0.2em] uppercase shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 border border-champagne-400">
-          <span>RSVP Now</span>
-          <i data-lucide="sparkles" class="w-4 h-4 text-champagne-400"></i>
-        </a>
-        <a href="#events" class="w-full sm:w-auto flex-1 min-h-[46px] px-6 py-2.5 rounded-full royal-glass hover:bg-white text-emerald-950 font-bold text-xs tracking-[0.2em] uppercase shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 border border-champagne-400/80">
-          <i data-lucide="calendar" class="w-4 h-4 text-champagne-600"></i>
-          <span>View Events</span>
-        </a>
+        <!-- Idle Hint Animated Glowing Dot (translateZ 25px) -->
+        <div class="scratch-idle-hint" id="scratchIdleHint"></div>
+
+        <!-- Expanding Gold Ring Pulse upon Reveal (translateZ 26px) -->
+        <div class="scratch-reveal-pulse" id="scratchPulseRing"></div>
+
       </div>
     </div>
+
+    <!-- Reveal Prompt & Accessibility Button Under Card -->
+    <div class="flex flex-col items-center text-center mt-5 mb-2 z-20">
+      <p id="scratchHintText" class="text-xs font-serif italic text-emerald-950 font-medium flex items-center gap-1.5 transition-opacity duration-300">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-champagne-600"></i>
+        <span>Use your finger to scratch</span>
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-champagne-600"></i>
+      </p>
+
+      <!-- Visible Fallback "Reveal Date" Button for Keyboard, Screen Readers & Direct Access -->
+      <button id="manualRevealBtn" type="button" class="mt-2 text-xs font-cinzel uppercase tracking-[0.2em] text-champagne-700 hover:text-emerald-950 underline decoration-champagne-500 underline-offset-4 py-1 px-3 rounded focus:outline-none focus:ring-2 focus:ring-champagne-500 transition-colors cursor-pointer" aria-label="Reveal wedding date directly">
+        ✦ Reveal Date ✦
+      </button>
+    </div>
+
+    <!-- Countdown Section Container (Locked until Date Revealed) -->
+    <div id="countdownContainer" class="w-full max-w-lg mt-8 px-2 z-10">
+      <!-- Locked Placeholder -->
+      <div id="countdownLockedPlaceholder" class="w-full p-6 sm:p-7 rounded-3xl royal-glass gold-gradient-border shadow-xl flex flex-col items-center justify-center text-center transition-all duration-500">
+        <div class="w-12 h-12 rounded-full bg-champagne-100 border border-champagne-400 flex items-center justify-center text-champagne-700 shadow-inner mb-3">
+          <i data-lucide="lock" class="w-5 h-5"></i>
+        </div>
+        <span class="font-cinzel text-xs uppercase tracking-[0.2em] text-emerald-900 font-bold">
+          Reveal the date to start the countdown
+        </span>
+        <p class="font-serif italic text-stone-600 text-xs mt-1">
+          Scratch the golden foil card above or tap "Reveal Date" to unlock the auspicious countdown &amp; calendar pass.
+        </p>
+      </div>
+
+      <!-- Unlocked Countdown Content (Hidden initially, revealed after scratch) -->
+      <div id="countdownUnlockedWrapper" class="hidden opacity-0 transition-opacity duration-700">
+        <div class="w-full p-6 sm:p-7 rounded-3xl royal-glass gold-gradient-border shadow-xl">
+          <div class="text-center mb-4">
+            <span class="font-cinzel text-xs uppercase tracking-[0.2em] text-emerald-900 font-bold flex items-center justify-center gap-2">
+              <i data-lucide="hourglass" class="w-3.5 h-3.5 text-champagne-600"></i>
+              Countdown to Our Forever
+              <i data-lucide="hourglass" class="w-3.5 h-3.5 text-champagne-600"></i>
+            </span>
+          </div>
+
+          <!-- 4 Count Badges -->
+          <div class="grid grid-cols-4 gap-2.5 sm:gap-4 text-center">
+            <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <span id="daysCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
+              <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Days</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <span id="hoursCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
+              <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Hours</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <span id="minsCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-emerald-950 leading-none">00</span>
+              <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Mins</span>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-3 sm:p-4 rounded-2xl bg-white/80 border border-champagne-300 shadow-sm hover:-translate-y-1 transition-transform duration-300">
+              <span id="secsCount" class="font-cinzel text-2xl sm:text-3xl font-bold text-champagne-600 leading-none animate-pulse">00</span>
+              <span class="text-[10px] sm:text-xs font-bold text-stone-500 uppercase tracking-widest mt-1.5">Secs</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons inside Unlocked Section -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full mt-6">
+            <!-- Add to Calendar Button (reusing downloadEventCalendar) -->
+            <button id="addToCalendarBtn" class="w-full sm:w-auto flex-1 min-h-[46px] px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-champagne-500 to-amber-600 text-emerald-950 font-bold text-xs tracking-[0.2em] uppercase shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 border border-champagne-300 cursor-pointer">
+              <i data-lucide="calendar-plus" class="w-4 h-4 text-emerald-950"></i>
+              <span>Add to Calendar</span>
+            </button>
+            <a href="#rsvp" class="w-full sm:w-auto flex-1 min-h-[46px] px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-950 text-champagne-200 font-bold text-xs tracking-[0.2em] uppercase shadow-md hover:shadow-xl hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 border border-champagne-400">
+              <span>RSVP Now</span>
+              <i data-lucide="sparkles" class="w-4 h-4 text-champagne-400"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ========================================================================= -->
@@ -1892,6 +2310,37 @@
     lucide.createIcons();
 
     /* -------------------------------------------------------------
+       0. GLOBAL CONFIGURATION (Single Source of Truth for Dates & Venues)
+       ------------------------------------------------------------- */
+    const CONFIG = {
+      groom: "Aarav",
+      bride: "Meera",
+      couple: "Aarav & Meera",
+      hashtag: "#AaravFoundHisMeera",
+      datesNumeric: "28 · 29",
+      dateStart: "28",
+      dateEnd: "29",
+      monthYear: "NOVEMBER 2026",
+      month: "November",
+      year: "2026",
+      dayNames: "Saturday & Sunday",
+      city: "Udaipur, Rajasthan",
+      venueName: "The Oberoi Udaivilas",
+      venueLocation: "Lake Pichola, Udaipur",
+      fullVenue: "The Oberoi Udaivilas • Lake Pichola, Udaipur",
+      weddingDateTimeIso: "2026-11-28T11:00:00+05:30",
+      calendarEvents: {
+        mainWedding: {
+          title: "The Royal Wedding of Aarav & Meera",
+          location: "The Oberoi Udaivilas, Lake Pichola, Udaipur",
+          startIso: "20261128T110000",
+          endIso: "20261129T235900",
+          description: "The Royal Wedding Celebration of Aarav & Meera in Udaipur."
+        }
+      }
+    };
+
+    /* -------------------------------------------------------------
        1. MASTER CINEMATIC REVEAL SEQUENCE (GSAP 3.12.5 Core)
        ------------------------------------------------------------- */
     const preloaderOverlay = document.getElementById('preloaderOverlay');
@@ -2531,34 +2980,951 @@
     animatePetals();
 
     /* -------------------------------------------------------------
-       3. LIVE COUNTDOWN TIMER
+       3. SAVE THE DATE: 3D GOLD-FOIL SCRATCH CARD & COUNTDOWN ENGINE
        ------------------------------------------------------------- */
-    const weddingDate = new Date('2026-11-28T11:00:00+05:30').getTime();
+    const scratchCard = document.getElementById('scratchCard');
+    const scratchCardContainer = document.getElementById('scratchCardContainer');
+    const scratchCanvas = document.getElementById('scratchCanvas');
+    const scratchFloorShadow = document.getElementById('scratchFloorShadow');
+    const scratchGlare = document.getElementById('scratchGlare');
+    const scratchDateLayer = document.getElementById('scratchDateLayer');
+    const scratchIdleHint = document.getElementById('scratchIdleHint');
+    const scratchPulseRing = document.getElementById('scratchPulseRing');
+    const scratchHintText = document.getElementById('scratchHintText');
+    const manualRevealBtn = document.getElementById('manualRevealBtn');
+    const countdownLockedPlaceholder = document.getElementById('countdownLockedPlaceholder');
+    const countdownUnlockedWrapper = document.getElementById('countdownUnlockedWrapper');
+    const addToCalendarBtn = document.getElementById('addToCalendarBtn');
+    const scratchFlakesContainer = document.getElementById('scratchFlakesContainer');
+    const savedateSection = document.getElementById('savedate');
 
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = weddingDate - now;
+    // Populate Dynamic Text from Single CONFIG Object
+    function syncDateTextFromConfig() {
+      const coupleEl = document.getElementById('scratchCoupleName');
+      const cityEl = document.getElementById('scratchCityName');
+      const venueEl = document.getElementById('scratchVenueName');
+      const monthYearEl = document.getElementById('scratchMonthYear');
+      const daysEl = document.getElementById('scratchDays');
+      const srEl = document.getElementById('srWeddingDate');
 
-      if (distance < 0) {
-        document.getElementById('daysCount').innerText = "00";
-        document.getElementById('hoursCount').innerText = "00";
-        document.getElementById('minsCount').innerText = "00";
-        document.getElementById('secsCount').innerText = "00";
+      if (coupleEl) coupleEl.textContent = CONFIG.couple.toUpperCase();
+      if (cityEl) cityEl.textContent = CONFIG.city;
+      if (venueEl) venueEl.textContent = CONFIG.venueName;
+      if (monthYearEl) monthYearEl.textContent = CONFIG.monthYear;
+      if (daysEl) daysEl.textContent = CONFIG.dayNames;
+      if (srEl) {
+        srEl.textContent = `Save the Date: ${CONFIG.couple} Royal Wedding, ${CONFIG.month} ${CONFIG.dateStart} & ${CONFIG.dateEnd}, ${CONFIG.year}, ${CONFIG.dayNames} in ${CONFIG.city} at ${CONFIG.fullVenue}.`;
+      }
+    }
+    syncDateTextFromConfig();
+
+    // Check Returning Guest State from localStorage
+    let isDateRevealed = false;
+    try {
+      isDateRevealed = localStorage.getItem('aarav_meera_date_revealed') === 'true';
+    } catch (e) {
+      isDateRevealed = false;
+    }
+
+    // Scratch Engine State
+    let scratchCtx = null;
+    let isScratching = false;
+    let lastScratchPoint = null;
+    let progressSamplingInterval = null;
+    let hasInteractedWithCard = false;
+    let sampleCanvas = null;
+    let sampleCtx = null;
+    let lastVibeTime = 0;
+    let lastScratchSoundTime = 0;
+
+    // 3D Tilt State
+    let currentTiltX = 0;
+    let currentTiltY = 0;
+    let targetTiltX = 0;
+    let targetTiltY = 0;
+    let tiltRafId = null;
+    let isSectionInView = false;
+    let orientationPermissionGranted = false;
+    let isAutoSwayActive = false;
+
+    // Idle Hint State
+    let idleHintTimeout = null;
+    let idleHintTimeline = null;
+
+    // Active Flakes Pool
+    const activeFlakes = [];
+
+    // Web Audio Soft Scratch Synthesis Buffer
+    let scratchNoiseBuffer = null;
+
+    function initScratchAudioBuffer() {
+      if (!audioCtx) return;
+      try {
+        if (!scratchNoiseBuffer) {
+          const bufferSize = audioCtx.sampleRate * 1.5;
+          scratchNoiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const channelData = scratchNoiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            channelData[i] = (Math.random() * 2 - 1) * 0.45;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function playSoftScratchSound(speed = 1) {
+      if (!audioCtx || audioCtx.state !== 'running') return;
+      if (!isPlaying) return; // Muted if raga soundtrack is toggled off
+      const now = Date.now();
+      if (now - lastScratchSoundTime < 60) return;
+      lastScratchSoundTime = now;
+
+      try {
+        initScratchAudioBuffer();
+        if (!scratchNoiseBuffer) return;
+
+        const noiseSource = audioCtx.createBufferSource();
+        noiseSource.buffer = scratchNoiseBuffer;
+        noiseSource.loop = false;
+
+        const biquad = audioCtx.createBiquadFilter();
+        biquad.type = 'bandpass';
+        biquad.frequency.setValueAtTime(1200 + Math.random() * 500, audioCtx.currentTime);
+        biquad.Q.setValueAtTime(2.2, audioCtx.currentTime);
+
+        const gainNode = audioCtx.createGain();
+        const vol = Math.min(0.045, 0.012 + speed * 0.0002);
+        gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+
+        noiseSource.connect(biquad);
+        biquad.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        noiseSource.start();
+        noiseSource.stop(audioCtx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    // 1. Procedural Champagne-Gold Foil Texture Generator (Drawn ONCE)
+    function generateFoilTexture() {
+      if (!scratchCanvas) return;
+      scratchCtx = scratchCanvas.getContext('2d');
+      if (!scratchCtx) {
+        // Fallback if canvas 2D unsupported: reveal date directly
+        revealWeddingDate(true);
         return;
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const rect = scratchCard.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const width = Math.round(rect.width || 340);
+      const height = Math.round(rect.height || 425);
 
-      document.getElementById('daysCount').innerText = days < 10 ? '0' + days : days;
-      document.getElementById('hoursCount').innerText = hours < 10 ? '0' + hours : hours;
-      document.getElementById('minsCount').innerText = minutes < 10 ? '0' + minutes : minutes;
-      document.getElementById('secsCount').innerText = seconds < 10 ? '0' + seconds : seconds;
+      scratchCanvas.width = width * dpr;
+      scratchCanvas.height = height * dpr;
+      scratchCtx.scale(dpr, dpr);
+
+      const w = width;
+      const h = height;
+
+      // A. Multi-stop Champagne-Gold Linear Gradient
+      const foilGrad = scratchCtx.createLinearGradient(0, 0, w, h);
+      foilGrad.addColorStop(0.00, '#8E6E16'); // Deep golden bronze
+      foilGrad.addColorStop(0.12, '#D4AF37'); // Classic Royal Gold
+      foilGrad.addColorStop(0.24, '#FDF8E4'); // Champagne highlights
+      foilGrad.addColorStop(0.36, '#B8860B'); // Warm Amber Gold
+      foilGrad.addColorStop(0.50, '#FAF0BE'); // Luminous Pale Gold
+      foilGrad.addColorStop(0.64, '#D4AF37'); // Gold core
+      foilGrad.addColorStop(0.78, '#7A5B0B'); // Shading band
+      foilGrad.addColorStop(0.90, '#FDF6DC'); // Shimmer accent
+      foilGrad.addColorStop(1.00, '#8E6E16'); // Edge tone
+
+      scratchCtx.fillStyle = foilGrad;
+      scratchCtx.fillRect(0, 0, w, h);
+
+      // B. Fine Brushed Metal Diagonal Micro-lines
+      scratchCtx.save();
+      for (let i = -h; i < w + h; i += 2.5) {
+        scratchCtx.beginPath();
+        scratchCtx.moveTo(i, 0);
+        scratchCtx.lineTo(i + h * 0.9, h);
+        const isLight = Math.random() > 0.45;
+        scratchCtx.strokeStyle = isLight ? 'rgba(255, 255, 255, 0.06)' : 'rgba(70, 48, 8, 0.08)';
+        scratchCtx.lineWidth = 1;
+        scratchCtx.stroke();
+      }
+      scratchCtx.restore();
+
+      // C. Fine Noise Grain for Tactile Metallic Surface
+      scratchCtx.save();
+      const noiseCount = Math.floor(w * h * 0.08);
+      for (let n = 0; n < noiseCount; n++) {
+        const nx = Math.random() * w;
+        const ny = Math.random() * h;
+        const alpha = Math.random() * 0.09;
+        scratchCtx.fillStyle = Math.random() > 0.5 ? `rgba(255,255,255,${alpha})` : `rgba(30,20,0,${alpha})`;
+        scratchCtx.fillRect(nx, ny, 1.2, 1.2);
+      }
+      scratchCtx.restore();
+
+      // D. Tiled Damask / Royal Jharokha Trellis Motif
+      scratchCtx.save();
+      const stepX = 40;
+      const stepY = 40;
+      scratchCtx.lineWidth = 0.8;
+      for (let gy = 0; gy < h + stepY; gy += stepY) {
+        for (let gx = 0; gx < w + stepX; gx += stepX) {
+          const shiftX = (gy / stepY) % 2 === 0 ? 0 : stepX / 2;
+          const px = gx + shiftX;
+          const py = gy;
+
+          // Subtle diamond trellis
+          scratchCtx.beginPath();
+          scratchCtx.moveTo(px, py - 14);
+          scratchCtx.lineTo(px + 14, py);
+          scratchCtx.lineTo(px, py + 14);
+          scratchCtx.lineTo(px - 14, py);
+          scratchCtx.closePath();
+          scratchCtx.strokeStyle = 'rgba(255, 248, 220, 0.16)';
+          scratchCtx.stroke();
+
+          // Delicate center lotus accent
+          scratchCtx.fillStyle = 'rgba(212, 175, 55, 0.18)';
+          scratchCtx.beginPath();
+          scratchCtx.arc(px, py, 1.5, 0, Math.PI * 2);
+          scratchCtx.fill();
+        }
+      }
+      scratchCtx.restore();
+
+      // E. Embossed "SCRATCH TO REVEAL" Central Badge & Stamp
+      scratchCtx.save();
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // Decorative double cartouche
+      scratchCtx.beginPath();
+      scratchCtx.roundRect(cx - 105, cy - 48, 210, 96, 18);
+      scratchCtx.strokeStyle = 'rgba(255, 250, 230, 0.8)';
+      scratchCtx.lineWidth = 1.4;
+      scratchCtx.stroke();
+
+      scratchCtx.beginPath();
+      scratchCtx.roundRect(cx - 98, cy - 41, 196, 82, 14);
+      scratchCtx.strokeStyle = 'rgba(100, 70, 10, 0.6)';
+      scratchCtx.lineWidth = 1;
+      scratchCtx.stroke();
+
+      // Central Sparkle / Coin Icon
+      const iconY = cy - 14;
+      scratchCtx.font = '20px serif';
+      scratchCtx.textAlign = 'center';
+      scratchCtx.textBaseline = 'middle';
+      // Embossed shadow
+      scratchCtx.fillStyle = 'rgba(70, 48, 6, 0.75)';
+      scratchCtx.fillText('✦ ⚜ ✦', cx + 1, iconY + 1.2);
+      // Embossed highlight
+      scratchCtx.fillStyle = 'rgba(255, 255, 240, 0.9)';
+      scratchCtx.fillText('✦ ⚜ ✦', cx - 1, iconY - 1);
+      // Face
+      scratchCtx.fillStyle = '#E8C868';
+      scratchCtx.fillText('✦ ⚜ ✦', cx, iconY);
+
+      // Main Text: "SCRATCH TO REVEAL"
+      const textY = cy + 12;
+      scratchCtx.font = '700 13px Cinzel, serif';
+      const mainText = 'SCRATCH TO REVEAL';
+
+      // 1. Embossed Shadow
+      scratchCtx.fillStyle = 'rgba(65, 45, 5, 0.85)';
+      scratchCtx.fillText(mainText, cx + 1.2, textY + 1.2);
+      // 2. Embossed Highlight
+      scratchCtx.fillStyle = 'rgba(255, 255, 230, 0.95)';
+      scratchCtx.fillText(mainText, cx - 1, textY - 1);
+      // 3. Face
+      scratchCtx.fillStyle = '#F4ECD0';
+      scratchCtx.fillText(mainText, cx, textY);
+
+      // Subtitle
+      const subText = '✦ TOUCH & SWIPE ✦';
+      scratchCtx.font = '600 8.5px "Plus Jakarta Sans", sans-serif';
+      scratchCtx.fillStyle = 'rgba(80, 55, 10, 0.8)';
+      scratchCtx.fillText(subText, cx + 0.8, cy + 28.8);
+      scratchCtx.fillStyle = '#FFEAA7';
+      scratchCtx.fillText(subText, cx, cy + 28);
+
+      scratchCtx.restore();
+
+      // Prepare Downscaled Offscreen Sampling Canvas (40x50)
+      sampleCanvas = document.createElement('canvas');
+      sampleCanvas.width = 40;
+      sampleCanvas.height = 50;
+      sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+
+    // 2. Quadratic-Smoothed Scratch Drawing Engine (Batched in RAF)
+    let scratchPointsQueue = [];
+    let isDrawingRafActive = false;
+
+    function getCanvasCoordinates(e) {
+      if (!scratchCanvas) return { x: 0, y: 0, clientX: 0, clientY: 0 };
+      const rect = scratchCanvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const scaleX = scratchCanvas.width / (rect.width * dpr);
+      const scaleY = scratchCanvas.height / (rect.height * dpr);
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
+        clientX: e.clientX,
+        clientY: e.clientY
+      };
+    }
+
+    function processScratchQueue() {
+      if (!scratchCtx || scratchPointsQueue.length === 0) {
+        isDrawingRafActive = false;
+        return;
+      }
+
+      scratchCtx.save();
+      scratchCtx.globalCompositeOperation = 'destination-out';
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const brushRadius = 22; // Soft 22px radius
+
+      for (let i = 0; i < scratchPointsQueue.length; i++) {
+        const p = scratchPointsQueue[i];
+        const rad = brushRadius;
+
+        // Soft radial brush gradient for authentic foil tear
+        const brushGrad = scratchCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+        brushGrad.addColorStop(0.00, 'rgba(0, 0, 0, 1.0)');
+        brushGrad.addColorStop(0.65, 'rgba(0, 0, 0, 0.95)');
+        brushGrad.addColorStop(1.00, 'rgba(0, 0, 0, 0.0)');
+
+        scratchCtx.fillStyle = brushGrad;
+        scratchCtx.beginPath();
+        scratchCtx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+        scratchCtx.fill();
+      }
+      scratchCtx.restore();
+
+      scratchPointsQueue = [];
+      isDrawingRafActive = false;
+    }
+
+    function scheduleScratchCircle(x, y) {
+      scratchPointsQueue.push({ x, y });
+      if (!isDrawingRafActive) {
+        isDrawingRafActive = true;
+        requestAnimationFrame(processScratchQueue);
+      }
+    }
+
+    function interpolateScratchStroke(p0, p1) {
+      const dx = p1.x - p0.x;
+      const dy = p1.y - p0.y;
+      const dist = Math.hypot(dx, dy);
+      const step = 4; // Dense circle interpolation prevents gaps during fast finger swipe
+      const steps = Math.max(1, Math.floor(dist / step));
+
+      for (let s = 0; s <= steps; s++) {
+        const t = s / steps;
+        scheduleScratchCircle(p0.x + dx * t, p0.y + dy * t);
+      }
+    }
+
+    // 3. Scratch Flakes Particle Generator (Max 30 live particles)
+    function spawnScratchFlakes(clientX, clientY) {
+      if (prefersReducedMotion || !scratchFlakesContainer) return;
+      if (activeFlakes.length >= 30) return;
+
+      const cardRect = scratchCard.getBoundingClientRect();
+      const localX = clientX - cardRect.left;
+      const localY = clientY - cardRect.top;
+
+      const count = Math.min(3, 30 - activeFlakes.length);
+      for (let f = 0; f < count; f++) {
+        const flake = document.createElement('div');
+        flake.className = 'scratch-flake';
+        flake.style.left = `${localX + (Math.random() * 16 - 8)}px`;
+        flake.style.top = `${localY + (Math.random() * 16 - 8)}px`;
+
+        const size = 2 + Math.random() * 3;
+        flake.style.width = `${size}px`;
+        flake.style.height = `${size}px`;
+
+        scratchFlakesContainer.appendChild(flake);
+        activeFlakes.push(flake);
+
+        const vx = (Math.random() * 30 - 15);
+        const vy = 20 + Math.random() * 35;
+        const rot = Math.random() * 360;
+
+        gsap.to(flake, {
+          x: vx,
+          y: vy,
+          rotation: rot,
+          opacity: 0,
+          scale: 0.3,
+          duration: 0.5 + Math.random() * 0.3,
+          ease: 'power1.out',
+          onComplete: () => {
+            if (flake.parentNode) flake.parentNode.removeChild(flake);
+            const idx = activeFlakes.indexOf(flake);
+            if (idx > -1) activeFlakes.splice(idx, 1);
+          }
+        });
+      }
+    }
+
+    // 4. Progress Sampler (Every 150ms)
+    function checkScratchProgress() {
+      if (!scratchCanvas || !sampleCtx || isDateRevealed) return;
+      try {
+        sampleCtx.clearRect(0, 0, 40, 50);
+        sampleCtx.drawImage(scratchCanvas, 0, 0, 40, 50);
+        const imgData = sampleCtx.getImageData(0, 0, 40, 50);
+        const data = imgData.data;
+        let cleared = 0;
+        const totalPixels = 40 * 50;
+
+        for (let i = 3; i < data.length; i += 4) {
+          if (data[i] < 64) { // Pixel cleared
+            cleared++;
+          }
+        }
+
+        const percent = (cleared / totalPixels) * 100;
+        if (percent >= 55) {
+          revealWeddingDate();
+        }
+      } catch (e) {}
+    }
+
+    // 5. Pointer Event Handlers
+    function onScratchStart(e) {
+      if (isDateRevealed) return;
+      if (scratchCanvas) {
+        try { scratchCanvas.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      isScratching = true;
+      hasInteractedWithCard = true;
+      dismissIdleHint();
+      ensureAudioContext();
+
+      // Ease 3D tilt to 0deg immediately so scratching occurs on a planar surface
+      targetTiltX = 0;
+      targetTiltY = 0;
+
+      const p = getCanvasCoordinates(e);
+      lastScratchPoint = p;
+      scheduleScratchCircle(p.x, p.y);
+      spawnScratchFlakes(p.clientX, p.clientY);
+
+      // Start sampling progress every 150ms
+      if (!progressSamplingInterval) {
+        progressSamplingInterval = setInterval(checkScratchProgress, 150);
+      }
+    }
+
+    function onScratchMove(e) {
+      if (!isScratching || isDateRevealed) return;
+
+      // Flatten tilt while dragging
+      targetTiltX = 0;
+      targetTiltY = 0;
+
+      // Handle coalesced high-frequency touch events for ultra-smooth lines
+      const events = (e.getCoalescedEvents && e.getCoalescedEvents()) || [e];
+      let strokeDistance = 0;
+
+      for (let i = 0; i < events.length; i++) {
+        const cur = getCanvasCoordinates(events[i]);
+        if (lastScratchPoint) {
+          interpolateScratchStroke(lastScratchPoint, cur);
+          strokeDistance += Math.hypot(cur.x - lastScratchPoint.x, cur.y - lastScratchPoint.y);
+        } else {
+          scheduleScratchCircle(cur.x, cur.y);
+        }
+        lastScratchPoint = cur;
+        spawnScratchFlakes(events[i].clientX, events[i].clientY);
+      }
+
+      // Haptic feedback (throttled to once per 80ms)
+      const now = Date.now();
+      if (now - lastVibeTime > 80 && navigator.vibrate) {
+        lastVibeTime = now;
+        try { navigator.vibrate(4); } catch (e) {}
+      }
+
+      // Tactile Web Audio scratch noise tied to stroke speed
+      playSoftScratchSound(strokeDistance);
+    }
+
+    function onScratchEnd(e) {
+      if (!isScratching) return;
+      isScratching = false;
+      lastScratchPoint = null;
+      if (scratchCanvas) {
+        try { scratchCanvas.releasePointerCapture(e.pointerId); } catch (err) {}
+      }
+      // Immediate progress check on release
+      checkScratchProgress();
+    }
+
+    // 6. 3D Tilt & Parallax Physics Engine
+    function updateTiltPhysics() {
+      if (!isSectionInView || document.hidden || prefersReducedMotion) {
+        tiltRafId = requestAnimationFrame(updateTiltPhysics);
+        return;
+      }
+
+      if (isScratching) {
+        // While scratching, rapidly ease tilt to 0deg
+        currentTiltX += (0 - currentTiltX) * 0.35;
+        currentTiltY += (0 - currentTiltY) * 0.35;
+      } else {
+        // Smooth low-pass blend towards target tilt
+        currentTiltX += (targetTiltX - currentTiltX) * 0.12;
+        currentTiltY += (targetTiltY - currentTiltY) * 0.12;
+      }
+
+      // Apply 3D Transform to Card
+      if (scratchCard) {
+        scratchCard.style.transform = `rotateX(${currentTiltX.toFixed(2)}deg) rotateY(${currentTiltY.toFixed(2)}deg)`;
+      }
+
+      // Parallax on Moving Specular Glare (translateZ 24px)
+      if (scratchGlare) {
+        const glarePosX = 50 + currentTiltY * 4.2;
+        const glarePosY = 50 - currentTiltX * 4.2;
+        scratchGlare.style.backgroundPosition = `${glarePosX.toFixed(1)}% ${glarePosY.toFixed(1)}%`;
+      }
+
+      // Floor Shadow Shift & Blur (translateZ -40px)
+      if (scratchFloorShadow) {
+        const shadowShiftX = -currentTiltY * 2.2;
+        const shadowShiftY = currentTiltX * 2.2;
+        const shadowBlur = 9 + Math.abs(currentTiltX) + Math.abs(currentTiltY);
+        scratchFloorShadow.style.transform = `translateZ(-40px) translate(${shadowShiftX.toFixed(1)}px, ${shadowShiftY.toFixed(1)}px)`;
+        scratchFloorShadow.style.filter = `blur(${shadowBlur.toFixed(1)}px)`;
+      }
+
+      // Parallax on Date Layer (+-6px)
+      if (scratchDateLayer) {
+        const dateParallaxX = currentTiltY * 0.65;
+        const dateParallaxY = -currentTiltX * 0.65;
+        scratchDateLayer.style.transform = `translateZ(14px) translate(${dateParallaxX.toFixed(1)}px, ${dateParallaxY.toFixed(1)}px)`;
+      }
+
+      tiltRafId = requestAnimationFrame(updateTiltPhysics);
+    }
+
+    // Pointer move listener for Desktop
+    function setupDesktopTilt() {
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+      window.addEventListener('pointermove', (e) => {
+        if (!isSectionInView || isScratching || isDateRevealed) return;
+        const rect = scratchCard.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const deltaX = (e.clientX - centerX) / (window.innerWidth / 2);
+        const deltaY = (e.clientY - centerY) / (window.innerHeight / 2);
+
+        targetTiltY = Math.max(-8, Math.min(8, deltaX * 8));
+        targetTiltX = Math.max(-8, Math.min(8, -deltaY * 8));
+      }, { passive: true });
+    }
+
+    // DeviceOrientation listener for Mobile (limit +-8deg)
+    function handleDeviceOrientation(e) {
+      if (!isSectionInView || isScratching || isDateRevealed) return;
+      if (e.gamma !== null && e.beta !== null) {
+        isAutoSwayActive = false;
+        // gamma: left/right [-90, 90], beta: front/back [-180, 180]
+        const tiltXDeg = (e.beta - 45) * 0.35; // typical holding angle ~45deg
+        const tiltYDeg = e.gamma * 0.35;
+
+        targetTiltX = Math.max(-8, Math.min(8, -tiltXDeg));
+        targetTiltY = Math.max(-8, Math.min(8, tiltYDeg));
+      }
+    }
+
+    function setupMobileOrientation() {
+      if (typeof DeviceOrientationEvent !== 'undefined') {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // iOS 13+ requires user gesture permission
+          const requestOrientationPermission = () => {
+            if (orientationPermissionGranted) return;
+            DeviceOrientationEvent.requestPermission()
+              .then(state => {
+                if (state === 'granted') {
+                  orientationPermissionGranted = true;
+                  window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
+                } else {
+                  startAutoSwayFallback();
+                }
+              })
+              .catch(() => startAutoSwayFallback());
+          };
+
+          if (scratchCardContainer) {
+            scratchCardContainer.addEventListener('pointerdown', requestOrientationPermission, { once: true });
+          }
+        } else {
+          window.addEventListener('deviceorientation', handleDeviceOrientation, { passive: true });
+        }
+      } else {
+        startAutoSwayFallback();
+      }
+    }
+
+    // Fallback Auto-Sway (+-4deg over 6s)
+    function startAutoSwayFallback() {
+      isAutoSwayActive = true;
+      let swayTime = 0;
+      setInterval(() => {
+        if (!isAutoSwayActive || !isSectionInView || isScratching || isDateRevealed) return;
+        swayTime += 0.05;
+        targetTiltX = Math.sin(swayTime * 1.05) * 4;
+        targetTiltY = Math.cos(swayTime * 0.85) * 4;
+      }, 50);
+    }
+
+    // 7. Idle Hint Glowing Dot
+    function startIdleHintLoop() {
+      if (isDateRevealed || hasInteractedWithCard || !scratchIdleHint) return;
+
+      idleHintTimeout = setTimeout(() => {
+        if (hasInteractedWithCard || isDateRevealed) return;
+
+        const w = scratchCard.offsetWidth || 340;
+        const h = scratchCard.offsetHeight || 425;
+
+        // Animate glowing dot tracing zigzag across foil, repeating every 4s
+        idleHintTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1.5 });
+        idleHintTimeline.set(scratchIdleHint, { opacity: 0, x: w * 0.25, y: h * 0.35 });
+        idleHintTimeline.to(scratchIdleHint, { opacity: 0.9, duration: 0.4 });
+        idleHintTimeline.to(scratchIdleHint, { x: w * 0.75, y: h * 0.45, duration: 0.9, ease: 'sine.inOut' });
+        idleHintTimeline.to(scratchIdleHint, { x: w * 0.25, y: h * 0.55, duration: 0.9, ease: 'sine.inOut' });
+        idleHintTimeline.to(scratchIdleHint, { x: w * 0.75, y: h * 0.65, duration: 0.9, ease: 'sine.inOut' });
+        idleHintTimeline.to(scratchIdleHint, { opacity: 0, duration: 0.4 });
+      }, 1500);
+    }
+
+    function dismissIdleHint() {
+      if (idleHintTimeout) clearTimeout(idleHintTimeout);
+      if (idleHintTimeline) idleHintTimeline.kill();
+      if (scratchIdleHint) scratchIdleHint.style.display = 'none';
+    }
+
+    // 8. Full Reveal Sequence (~2.5s)
+    function revealWeddingDate(instant = false) {
+      if (isDateRevealed) return;
+      isDateRevealed = true;
+
+      // Stop ongoing timers
+      if (progressSamplingInterval) clearInterval(progressSamplingInterval);
+      dismissIdleHint();
+
+      // Save to localStorage
+      try {
+        localStorage.setItem('aarav_meera_date_revealed', 'true');
+      } catch (e) {}
+
+      // Fast crossfade for reduced motion or fallback
+      if (instant || prefersReducedMotion) {
+        if (scratchCanvas) scratchCanvas.style.display = 'none';
+        if (scratchGlare) scratchGlare.style.opacity = '0.35';
+        if (scratchHintText) scratchHintText.style.display = 'none';
+        if (manualRevealBtn) manualRevealBtn.style.display = 'none';
+
+        const digits = ['#digit1', '#digit2', '#digitSep', '#digit3', '#digit4'];
+        digits.forEach(id => {
+          const el = document.querySelector(id);
+          if (el) el.classList.add('date-num-shimmer');
+        });
+
+        unlockCountdownView(true);
+        return;
+      }
+
+      // Haptic success pattern [20, 40, 20]
+      if (navigator.vibrate) {
+        try { navigator.vibrate([20, 40, 20]); } catch (e) {}
+      }
+
+      // Step 1: Foil dissolves (0.6s) & Gold Ring Pulse expands (scale 1 to 2.2, opacity 0.6 to 0)
+      gsap.to(scratchCanvas, {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        onComplete: () => {
+          if (scratchCanvas) scratchCanvas.style.display = 'none';
+        }
+      });
+      gsap.to(scratchGlare, { opacity: 0.35, duration: 0.6 });
+      if (scratchHintText) gsap.to(scratchHintText, { opacity: 0, duration: 0.3 });
+      if (manualRevealBtn) gsap.to(manualRevealBtn, { opacity: 0, duration: 0.3, onComplete: () => { manualRevealBtn.style.display = 'none'; } });
+
+      if (scratchPulseRing) {
+        gsap.fromTo(scratchPulseRing, 
+          { scale: 1.0, opacity: 0.65 },
+          { scale: 2.2, opacity: 0, duration: 0.85, ease: 'power2.out' }
+        );
+      }
+
+      // Step 2: Card lifts (translateZ and scale 1.03) with a rotateX settle (0.6s, back.out)
+      targetTiltX = 0;
+      targetTiltY = 0;
+      gsap.to(scratchCard, {
+        scale: 1.03,
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        onComplete: () => {
+          gsap.to(scratchCard, { scale: 1.0, duration: 0.4, ease: 'power1.out' });
+        }
+      });
+
+      // Step 3: Date numerals pop forward in Z (stagger 0.08s) + shimmer pass
+      const digitEls = ['#digit1', '#digit2', '#digitSep', '#digit3', '#digit4'].map(id => document.querySelector(id)).filter(Boolean);
+      digitEls.forEach((el, idx) => {
+        gsap.fromTo(el,
+          { transform: 'translateZ(0px) scale(0.9)', opacity: 0.7 },
+          { 
+            transform: 'translateZ(30px) scale(1.0)', 
+            opacity: 1, 
+            duration: 0.5, 
+            delay: idx * 0.08, 
+            ease: 'back.out(2.0)',
+            onComplete: () => {
+              el.classList.add('date-num-shimmer');
+            }
+          }
+        );
+      });
+
+      // Step 4: canvas-confetti (40 gold/rose particles from card's top edge) & ambient petals
+      if (typeof confetti === 'function') {
+        const rect = scratchCard.getBoundingClientRect();
+        const originX = (rect.left + rect.width / 2) / window.innerWidth;
+        const originY = Math.max(0.08, (rect.top + 20) / window.innerHeight);
+
+        confetti({
+          particleCount: 40,
+          spread: 75,
+          origin: { x: originX, y: originY },
+          colors: ['#D4AF37', '#FAF6E8', '#DEC47B', '#8E6E16', '#BF434D'],
+          gravity: 0.85,
+          disableForReducedMotion: true
+        });
+      }
+
+      if (typeof rampAmbientPetals === 'function') {
+        rampAmbientPetals();
+      }
+
+      // Step 5: Countdown fades in below with numbers counting up from 0
+      setTimeout(() => {
+        unlockCountdownView(false);
+      }, 700);
+    }
+
+    // 9. Countdown Display & Count-Up Animation
+    let countdownIntervalId = null;
+
+    function getRemainingTime() {
+      const targetTime = new Date(CONFIG.weddingDateTimeIso).getTime();
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      if (distance < 0) {
+        return { days: 0, hours: 0, mins: 0, secs: 0 };
+      }
+
+      return {
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        mins: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        secs: Math.floor((distance % (1000 * 60)) / 1000)
+      };
+    }
+
+    function updateCountdown() {
+      const { days, hours, mins, secs } = getRemainingTime();
+      const dEl = document.getElementById('daysCount');
+      const hEl = document.getElementById('hoursCount');
+      const mEl = document.getElementById('minsCount');
+      const sEl = document.getElementById('secsCount');
+
+      if (dEl) dEl.innerText = days < 10 ? '0' + days : days;
+      if (hEl) hEl.innerText = hours < 10 ? '0' + hours : hours;
+      if (mEl) mEl.innerText = mins < 10 ? '0' + mins : mins;
+      if (sEl) sEl.innerText = secs < 10 ? '0' + secs : secs;
+    }
+
+    function unlockCountdownView(instant = false) {
+      if (countdownLockedPlaceholder) {
+        countdownLockedPlaceholder.style.display = 'none';
+      }
+      if (!countdownUnlockedWrapper) return;
+
+      countdownUnlockedWrapper.classList.remove('hidden');
+
+      const { days, hours, mins, secs } = getRemainingTime();
+
+      if (instant || prefersReducedMotion) {
+        countdownUnlockedWrapper.style.opacity = '1';
+        updateCountdown();
+        if (!countdownIntervalId) countdownIntervalId = setInterval(updateCountdown, 1000);
+        return;
+      }
+
+      gsap.fromTo(countdownUnlockedWrapper,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
+      );
+
+      // Count up from 0 to target values over 1.2s
+      const counterObj = { d: 0, h: 0, m: 0, s: 0 };
+      gsap.to(counterObj, {
+        d: days,
+        h: hours,
+        m: mins,
+        s: secs,
+        duration: 1.3,
+        ease: 'power2.out',
+        onUpdate: () => {
+          const curD = Math.round(counterObj.d);
+          const curH = Math.round(counterObj.h);
+          const curM = Math.round(counterObj.m);
+          const curS = Math.round(counterObj.s);
+          const dEl = document.getElementById('daysCount');
+          const hEl = document.getElementById('hoursCount');
+          const mEl = document.getElementById('minsCount');
+          const sEl = document.getElementById('secsCount');
+
+          if (dEl) dEl.innerText = curD < 10 ? '0' + curD : curD;
+          if (hEl) hEl.innerText = curH < 10 ? '0' + curH : curH;
+          if (mEl) mEl.innerText = curM < 10 ? '0' + curM : curM;
+          if (sEl) sEl.innerText = curS < 10 ? '0' + curS : curS;
+        },
+        onComplete: () => {
+          updateCountdown();
+          if (!countdownIntervalId) countdownIntervalId = setInterval(updateCountdown, 1000);
+        }
+      });
+    }
+
+    // 10. Wire "Add to Calendar" Button inside Unlocked Countdown
+    if (addToCalendarBtn) {
+      addToCalendarBtn.addEventListener('click', () => {
+        const ev = CONFIG.calendarEvents.mainWedding;
+        if (typeof downloadEventCalendar === 'function') {
+          downloadEventCalendar(ev.title, ev.location, ev.startIso, ev.endIso, ev.description);
+        }
+      });
+    }
+
+    // 11. Wire Manual "✦ Reveal Date ✦" Accessibility Button
+    if (manualRevealBtn) {
+      manualRevealBtn.addEventListener('click', () => {
+        revealWeddingDate(false);
+      });
+    }
+
+    // 12. Intersection Observer for Entrance Animation (40% in view)
+    let hasEnteredView = false;
+    if ('IntersectionObserver' in window && savedateSection) {
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isSectionInView = entry.isIntersecting;
+
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4 && !hasEnteredView) {
+            hasEnteredView = true;
+
+            if (!prefersReducedMotion) {
+              // Rise from below with rotateX(25deg) to 0, translateY(60px) to 0 over 1s (power3.out)
+              gsap.fromTo(scratchCard,
+                { rotateX: 25, y: 60, opacity: 0 },
+                { rotateX: 0, y: 0, opacity: 1, duration: 1.0, ease: 'power3.out' }
+              );
+
+              // Single light sweep across the foil
+              if (scratchGlare) {
+                gsap.fromTo(scratchGlare,
+                  { opacity: 0, backgroundPosition: '0% 0%' },
+                  { opacity: 0.85, backgroundPosition: '100% 100%', duration: 1.1, ease: 'power2.inOut', onComplete: () => {
+                    scratchGlare.style.opacity = isDateRevealed ? '0.35' : '0.75';
+                  }}
+                );
+              }
+            } else {
+              scratchCard.style.opacity = '1';
+            }
+          }
+        });
+      }, { threshold: [0, 0.4] });
+
+      sectionObserver.observe(savedateSection);
+    } else {
+      isSectionInView = true;
+      if (scratchCard) scratchCard.style.opacity = '1';
+    }
+
+    // 13. Initialization Sequence
+    function initSaveDateCard() {
+      if (isDateRevealed) {
+        // Returning Guest State: Date already revealed, no scratch required
+        if (scratchCanvas) scratchCanvas.style.display = 'none';
+        if (scratchGlare) scratchGlare.style.opacity = '0.35';
+        if (scratchHintText) scratchHintText.style.display = 'none';
+        if (manualRevealBtn) manualRevealBtn.style.display = 'none';
+
+        const digits = ['#digit1', '#digit2', '#digitSep', '#digit3', '#digit4'];
+        digits.forEach(id => {
+          const el = document.querySelector(id);
+          if (el) {
+            el.classList.add('date-num-shimmer');
+            el.style.transform = 'translateZ(30px)';
+          }
+        });
+
+        unlockCountdownView(true);
+      } else {
+        // First Time Guest: Generate Foil and bind Scratch Events
+        generateFoilTexture();
+
+        if (scratchCanvas) {
+          scratchCanvas.addEventListener('pointerdown', onScratchStart);
+          scratchCanvas.addEventListener('pointermove', onScratchMove);
+          scratchCanvas.addEventListener('pointerup', onScratchEnd);
+          scratchCanvas.addEventListener('pointercancel', onScratchEnd);
+        }
+
+        startIdleHintLoop();
+      }
+
+      // Initialize 3D Motion
+      setupDesktopTilt();
+      setupMobileOrientation();
+      tiltRafId = requestAnimationFrame(updateTiltPhysics);
+
+      // Handle window resize for canvas responsiveness
+      window.addEventListener('resize', () => {
+        if (!isDateRevealed && scratchCanvas) {
+          generateFoilTexture();
+        }
+      }, { passive: true });
+    }
+
+    // Run Initialization when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSaveDateCard);
+    } else {
+      initSaveDateCard();
+    }
 
     /* -------------------------------------------------------------
        4. PROCEDURAL ROYAL AMBIENT SOUNDTRACK (Web Audio API)
